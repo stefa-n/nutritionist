@@ -1,0 +1,79 @@
+.wrapper {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 1rem;
+}
+
+.logo {
+  width: 15vh;
+}
+
+.searchBar {
+  background-color: #DADADA;
+  border-radius: 10px;
+  width: 50vw;
+  height: 2.5rem;
+  padding-left: 2%;
+}
+
+.categories {
+  display: flex;
+  justify-content: space-between;
+  width: 52vw;
+  margin-top: 10px;
+  gap: 10px;
+}
+
+.calories {
+  display: flex;
+  justify-content: center;
+  border-radius: 10px;
+  background-color: #C3E8A6;
+  padding: 1%;
+  width: 27%
+}
+
+.nutriscore {
+  display: flex;
+  justify-content: center;
+  border-radius: 10px;
+  background-color: #D0576D;
+  padding: 1%;
+  width: 27%
+}
+
+.novascore {
+  display: flex;
+  justify-content: center;
+  border-radius: 10px;
+  background-color: #E6E88C;
+  padding: 1%;
+  width: 27%
+}
+
+.cont {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #DADADA;
+  border-radius: 10px;
+  width: 5rem;
+  height: 2.5rem;
+  margin-top: -2.5rem;
+}
+
+@media (max-width : 1000px) {
+  .wrapper {
+    flex-direction: column;
+  }
+  .categories {
+    width: 185vw;
+    align-items: center;
+    flex-direction: column;
+  }
+  .cont {
+    width: 54vw;
+    margin-top: 10px;
+  }
+}
