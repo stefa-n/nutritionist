@@ -2,6 +2,7 @@ import Head from "next/head";
 import styles from "@/styles/Home.module.css";
 
 import Topbar from "@/components/Topbar";
+import Card from "@/components/Card";
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
       </Head>
       <main className={`${styles.main}`}>
         <Topbar />
+        <Card name="VIVA - Pernuțe umplute cu cremă de cacao" image="https://shopius.ro/wp-content/uploads/2020/11/sc3f9rs_viva_pernite_cacao_100g_1.png" calories={70} nutriscore="E" novascore={2} />
       </main>
     </>
   );
