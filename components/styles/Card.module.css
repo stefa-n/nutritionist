@@ -9,6 +9,9 @@
 .image {
     margin: auto;
     display: block;
+    width: auto;
+    height: auto;
+    max-height: calc(326.03px - 113.11px);
 }
 
 .title {
