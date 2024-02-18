@@ -20,7 +20,7 @@ export default function Home({ products }) {
           <div className={`${styles.grid}`}>
           <Card brand="VIVA" name="Pernuțe umplute cu cremă de cacao" image="https://shopius.ro/wp-content/uploads/2020/11/sc3f9rs_viva_pernite_cacao_100g_1.png" calories={70} nutriscore="E" novascore={2} />
           {products.map((product) => (
-            <Card brand={product.brand} name={product.product_name} image={product.image} calories={product.kcal} nutriscore={0} novascore={0} />
+            <Card key={product.id} brand={product.brand} name={product.product_name} image={product.image} calories={product.kcal} nutriscore={0} novascore={0}/>
           ))}
         </div>
       </main>
