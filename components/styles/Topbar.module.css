@@ -67,6 +67,9 @@
   .wrapper {
     flex-direction: column;
   }
+  .logo {
+    display: none;
+  }
   .categories {
     width: 185vw;
     align-items: center;
