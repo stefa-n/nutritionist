@@ -61,6 +61,7 @@
   width: 5rem;
   height: 2.5rem;
   margin-top: -2.5rem;
+  border: 2px solid black;
 }
 
 @media (max-width : 1000px) {

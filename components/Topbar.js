@@ -63,10 +63,9 @@ export default function Topbar() {
                 break;
         }
     }
-    
+    // <Image src={require("@/public/images/logo.svg")} alt="Nutritionist" width={188} height={105} className={`${styles.logo}`}/>
     return (
         <div className={styles.wrapper}>
-            <Image src={require("@/public/images/logo.svg")} alt="Nutritionist" width={188} height={105} className={`${styles.logo}`}/>
             <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}}>
                 <input className={`${styles.searchBar}`} type="text" placeholder="Caută produse..." />
                 <div className={`${styles.categories}`}>
