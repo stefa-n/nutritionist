@@ -1,4 +1,6 @@
 import Head from "next/head";
+import { useRouter } from "next/router";
+
 import styles from "@/styles/Home.module.css";
 
 import Topbar from "@/components/Topbar";
@@ -8,6 +10,7 @@ import { createClient } from "@supabase/supabase-js";
 export const supabase = createClient('https://devjuheafwjammjnxthd.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRldmp1aGVhZndqYW1tam54dGhkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcwODI4MTg5MiwiZXhwIjoyMDIzODU3ODkyfQ.RHiqiCEAMLAoJVJ-F07Hcby3MmjR5HpC_su0DbDsFS4')
 
 export default function Home({ products }) {
+  const router = useRouter();
   return (
     <>
       <Head>
@@ -18,9 +21,8 @@ export default function Home({ products }) {
       <main className={`${styles.main}`}>
         <Topbar />
           <div className={`${styles.grid}`}>
-          <Card brand="VIVA" name="Pernuțe umplute cu cremă de cacao" image="https://shopius.ro/wp-content/uploads/2020/11/sc3f9rs_viva_pernite_cacao_100g_1.png" calories={70} nutriscore="E" novascore={2} />
           {products.map((product) => (
-            <Card key={product.id} brand={product.brand} name={product.product_name} image={product.image} calories={product.kcal} nutriscore={0} novascore={0}/>
+            <Card key={product.id} brand={product.brand} name={product.product_name} image={product.image} calories={product.kcal} nutriscore={0} novascore={0} onClick={() => router.push("/routes/produs?barcode=" + product.barcode)}/>
           ))}
         </div>
       </main>
@@ -34,11 +36,13 @@ export async function getServerSideProps() {
 
   const produse = data;
 
+  console.log("\n\nGetting products from database")
+
   for (let i = 0; i < data.length; i++) {
     const { data } = supabase
       .storage
       .from('products')
-      .getPublicUrl('5449000306821.jpg')
+      .getPublicUrl(`${produse[i].barcode}.${produse[i].image_format}`)
 
     console.log(data.publicUrl)
     produse[i].image = `${data.publicUrl}`

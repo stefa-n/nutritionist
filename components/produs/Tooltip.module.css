@@ -1,0 +1,26 @@
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 7vw;
+    height: 4.5vh;
+
+    min-width: 80px;
+
+    border-radius: 10px;
+}
+
+.icon {
+    margin-right: 5px;
+}
+
+.text {
+    font-size: 0.75rem;
+}
+
+@media (max-width : 1000px) {
+    .wrapper {
+        width: 40vw;
+    }
+  }

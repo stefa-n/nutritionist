@@ -1,0 +1,116 @@
+.main {
+  min-height: 97vh;
+}
+
+.card {
+  position: absolute;
+  top: 10vh;
+  left: 15vw;
+
+  width: 70vw;
+  min-height: 80vh;
+
+  background-color: #E6E88C;
+  border-radius: 10px;
+}
+
+.inapoi {
+  position: relative;
+  top: 5vh;
+  left: 50%;
+  transform: translateX(-50%);
+  
+  width: 5rem;
+
+  background-color: #D0576D;
+  border-radius: 10px;
+
+  text-align: center;
+}
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  gap: 10%;
+  padding: 5%;
+}
+
+.image {
+  width: auto;
+  height: 250px;
+}
+
+.titleInfo {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+
+.title {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.tooltipWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  padding-left: 5%;
+  padding-right: 5%;
+  gap: 10px;
+}
+
+.infoTitle {
+  font-size: 1.5rem;
+  margin-bottom: 0;
+}
+
+.ingredient:nth-child(3n) {
+  background-color: #C3E8A6;
+}
+
+.ingredient:nth-child(3n + 1) {
+  background-color: #D0576D;
+}
+
+.ingredient:nth-child(3n + 2) {
+  background-color: #D9D9D9;
+}
+
+.ingredient {
+  margin-right: 1%;
+  margin-bottom: 1%;
+
+  padding: 0.2%;
+  padding-left: 1%;
+  padding-right: 1%;
+
+  display: inline-block;
+
+  border-radius: 10px;
+}
+
+@media (max-width : 1000px) {
+  .card {
+    top: 0;
+    left: 0;
+    width: 100vw;
+    min-height: 100vh;
+    border-radius: 0;
+  }
+  .titleInfo {
+    width: 100%;
+  }
+  .tooltipWrapper {
+    flex-direction: column;
+    gap: 1px;
+  }
+}

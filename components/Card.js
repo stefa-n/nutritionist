@@ -2,9 +2,9 @@ import Image from "next/image";
 import styles from "./styles/Card.module.css";
 import Tooltip from "./Card/Tooltip";
 
-export default function Card({ brand, name, image, calories, nutriscore, novascore }) {
+export default function Card({ brand, name, image, calories, nutriscore, novascore, onClick }) {
     return (
-        <div className={styles.wrapper}>
+        <div className={styles.wrapper} onClick={onClick}>
             <Image src={image} alt={name} width={200} height={200} className={styles.image}/>
             <div className={styles.textArea}>
                 <p className={styles.title}>{brand} - {name}</p>
