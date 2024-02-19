@@ -9,7 +9,7 @@ import Card from "@/components/Card";
 
 import { useState } from "react";
 
-export default function Home({ query, products }) {
+export default function Search({ query, products }) {
   const router = useRouter();
   const [cautare, setCautare] = useState(query);
 
