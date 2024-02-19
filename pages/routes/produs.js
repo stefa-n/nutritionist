@@ -10,7 +10,7 @@ import Tooltip from "@/components/produs/Tooltip";
 import { supabase } from "@/pages/index";
 import { useRouter } from "next/router";
 
-export default function produs({ produs }) {
+export default function Produs({ produs }) {
     const router = useRouter();
 
     const ingredients = produs.ingredients.split(', ')
