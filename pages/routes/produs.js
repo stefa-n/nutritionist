@@ -4,6 +4,7 @@ import Image from "next/image";
 import styles from "@/styles/routes/produs.module.css";
 
 import Topbar from "@/components/Topbar";
+import Card from "@/components/Card";
 import Tooltip from "@/components/produs/Tooltip";
 
 import { supabase } from "@/pages/index";
@@ -28,13 +29,20 @@ export default function produs({ produs }) {
       <main className={`${styles.main}`}>
         <div style={{filter: "blur(5px)"}}>
             <Topbar />
+            <div className={styles.grid}>
+                {Array(8).fill().map((_, i) => (
+                    <Card key={i} brand={"product.brand"} name={"product.product_name"} image={"https://upload.wikimedia.org/wikipedia/en/thumb/9/98/Blank_button.svg/146px-Blank_button.svg.png?20100529213045"} calories={"100"} nutriscore={"A"} novascore={1}/>
+                ))}
+            </div>
         </div>
         <div className={styles.card}>
             <div className={styles.inapoi} onClick={() => router.push('/')}>
                 Inapoi
             </div>
             <div className={styles.wrapper}>
-                <Image src={produs.image} width={200} height={200} className={styles.image}/>
+                <div style={{width: '200px'}}>
+                    <Image src={produs.image} width={200} height={200} className={styles.image} alt={produs.product_name}/>
+                </div>
                 <div className={styles.titleInfo}>
                     <p className={styles.title}>{produs.brand} - {produs.product_name}</p>
                     <div className={styles.tooltipWrapper}>

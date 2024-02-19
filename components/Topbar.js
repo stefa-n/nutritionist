@@ -1,8 +1,13 @@
+import { useRouter } from "next/router";
+
 import Image from "next/image";
 import styles from "./styles/Topbar.module.css";
-import { useState } from "react";
 
-export default function Topbar() {
+import { useEffect, useState } from "react";
+
+export default function Topbar({ value }) {
+    const router = useRouter();
+
     const [calories, setCalories] = useState('<500');
     const [nutriscore, setNutriscore] = useState('A');
     const [novascore, setNovascore] = useState('1');
@@ -63,25 +68,48 @@ export default function Topbar() {
                 break;
         }
     }
+
+    const [Value, setValue] = useState(value);
+
+    function valueChanged(e) {
+        let value = e.target.value;
+        setValue(value);
+    }
+
+    useEffect(() => {
+        setTimeout(() => {
+            if (value == Value) return;
+            if (router.pathname === "/" && Value === "") return;
+            if(Value === "") {
+                router.push("/");
+                console.log("Pushing to /");
+            } else if (router.query.query != Value) {
+                console.log(router.query.query, Value)
+                console.log("Pushing to /routes/search?query=" + Value);
+                router.push("/routes/search?query=" + Value);
+            }
+        }, 1000);
+    })
+
     // <Image src={require("@/public/images/logo.svg")} alt="Nutritionist" width={188} height={105} className={`${styles.logo}`}/>
     return (
         <div className={styles.wrapper}>
             <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}}>
-                <input className={`${styles.searchBar}`} type="text" placeholder="Caută produse..." />
+                <input value={Value} className={`${styles.searchBar}`} type="text" placeholder="Caută produse..." onChange={(e) => valueChanged(e)}/>
                 <div className={`${styles.categories}`}>
                     <div className={`${styles.calories}`} onClick={changeCalories}>
-                        <Image src={require("@/public/images/icons/cals.png")} className={styles.categoryImages}/>Calorii: {calories} <span style={{fontSize: '12px', margin: 0}}>kcal</span>
+                        <Image src={require("@/public/images/icons/cals.png")} className={styles.categoryImages} alt="Tooltip" />Calorii: {calories} <span style={{fontSize: '12px', margin: 0}}>kcal</span>
                     </div>
                     <div className={`${styles.nutriscore}`} onClick={changeNutriscore}>
-                        <Image src={require("@/public/images/icons/nutri.png")} className={styles.categoryImages}/>Nutri-score: {nutriscore}
+                        <Image src={require("@/public/images/icons/nutri.png")} className={styles.categoryImages} alt="Tooltip" />Nutri-score: {nutriscore}
                     </div>
                     <div className={`${styles.novascore}`} onClick={changeNovascore}>
-                        <Image src={require("@/public/images/icons/nova.png")} className={styles.categoryImages}/>NOVA-score: {novascore}
+                        <Image src={require("@/public/images/icons/nova.png")} className={styles.categoryImages} alt="Tooltip" />NOVA-score: {novascore}
                     </div>
                 </div>
             </div>
             <div className={styles.cont}>
-                <Image src={require("@/public/images/icons/cont.png")} width={50} style={{width: '15px', height: 'auto', marginTop: '2px', marginRight: '2px'}}/>
+                <Image src={require("@/public/images/icons/cont.png")} alt="Cont" width={50} style={{width: '15px', height: 'auto', marginTop: '2px', marginRight: '2px'}}/>
                 <span>Cont</span>
             </div>
         </div>

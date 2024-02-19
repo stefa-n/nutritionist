@@ -2,10 +2,21 @@
   min-height: 97vh;
 }
 
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 10px;
+  padding: 1rem;
+
+  align-items: center;
+  width: 95vw;
+}
+
 .card {
   position: absolute;
-  top: 10vh;
-  left: 15vw;
+  left: 50%;
+  top: 10%;
+  transform: translateX(-50%);
 
   width: 70vw;
   min-height: 80vh;
@@ -16,7 +27,7 @@
 
 .inapoi {
   position: relative;
-  top: 5vh;
+  top: 4vh;
   left: 50%;
   transform: translateX(-50%);
   
@@ -100,6 +111,7 @@
 
 @media (max-width : 1000px) {
   .card {
+    transform: translateX(0);
     top: 0;
     left: 0;
     width: 100vw;
@@ -107,10 +119,20 @@
     border-radius: 0;
   }
   .titleInfo {
-    width: 100%;
+    transform: translateX(-50px);
+  }
+  .title {
+    font-size: 1rem;
   }
   .tooltipWrapper {
     flex-direction: column;
     gap: 1px;
+  }
+  .grid {
+    display: none;
+  }
+  .image {
+    max-width: 300px;
+    height: auto;
   }
 }
