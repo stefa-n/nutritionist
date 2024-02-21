@@ -6,12 +6,10 @@ import styles from "@/styles/Home.module.css";
 
 import Topbar from "@/components/Topbar";
 import Card from "@/components/Card";
-
-import { useState } from "react";
+import Produs from "@/components/produs";
 
 export default function Search({ query, products }) {
-  const router = useRouter();
-  const [cautare, setCautare] = useState(query);
+  const cautare = query;
 
   return (
     <>
@@ -24,7 +22,14 @@ export default function Search({ query, products }) {
         <Topbar value={cautare}/>
         <div className={`${styles.grid}`}>
           {products.map((product) => (
-            <Card key={product.id} brand={product.brand} name={product.product_name} image={product.image} calories={product.kcal} nutriscore={0} novascore={0} onClick={() => router.push("/routes/produs?barcode=" + product.barcode)}/>
+            <div>
+              <Card key={product.id} brand={product.brand} name={product.product_name} image={product.image} calories={product.kcal} nutriscore={0} novascore={0} onClick={() => {
+                document.getElementsByClassName("product." + product.id)[0].style.display = "flex"
+              }}/>
+              <div className={"product." + product.id} style={{display: "none", position: "absolute", zIndex: "100", top: "0", left: "0", width: "100%", height: "100%"}}>
+                <Produs key={product.id} produs={product} />
+              </div>
+            </div>
           ))}
         </div>
       </main>

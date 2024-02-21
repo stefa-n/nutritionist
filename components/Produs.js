@@ -3,40 +3,28 @@ import Image from "next/image";
 
 import styles from "@/styles/routes/produs.module.css";
 
-import Topbar from "@/components/Topbar";
-import Card from "@/components/Card";
 import Tooltip from "@/components/produs/Tooltip";
 
 import { supabase } from "@/pages/index";
-import { useRouter } from "next/router";
+import { useState } from "react";
 
 export default function Produs({ produs }) {
-    const router = useRouter();
-
     const ingredients = produs.ingredients.split(', ')
-    var allergens = ["Nu conține alergeni"]
+    var allergens = []
 
     if(produs.allergens != null)
         allergens = produs.allergens.split(', ')
+    else
+        allergens[0] = "Nu conține alergeni"
+
+    const inapoi = () => {
+        document.getElementsByClassName("product." + produs.id)[0].style.display = "none"
+    }
 
     return (
     <>
-      <Head>
-        <title>Nutritionist</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <main className={`${styles.main}`}>
-        <div style={{filter: "blur(5px)"}}>
-            <Topbar />
-            <div className={styles.grid}>
-                {Array(8).fill().map((_, i) => (
-                    <Card key={i} brand={"product.brand"} name={"product.product_name"} image={"https://upload.wikimedia.org/wikipedia/en/thumb/9/98/Blank_button.svg/146px-Blank_button.svg.png?20100529213045"} calories={"100"} nutriscore={"A"} novascore={1}/>
-                ))}
-            </div>
-        </div>
         <div className={styles.card}>
-            <div className={styles.inapoi} onClick={() => router.push('/')}>
+            <div className={styles.inapoi} onClick={() => {inapoi()}}>
                 Inapoi
             </div>
             <div className={styles.wrapper}>
@@ -59,8 +47,7 @@ export default function Produs({ produs }) {
                         <span key={ingredient} className={styles.ingredient}>{ingredient}</span>
                     ))}
                 </div>
-            </div>
-
+            </div>  
             <div className={styles.info}>
                 <p className={styles.infoTitle}>Alergeni:</p>
                 <div className={styles.container}>
@@ -70,7 +57,6 @@ export default function Produs({ produs }) {
                 </div>
             </div>
         </div>
-      </main>
     </>
   );
 }

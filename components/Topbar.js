@@ -88,7 +88,7 @@ export default function Topbar({ value }) {
                 console.log("Pushing to /routes/search?query=" + Value);
                 router.push("/routes/search?query=" + Value);
             }
-        }, 1000);
+        }, 10);
     })
 
     // <Image src={require("@/public/images/logo.svg")} alt="Nutritionist" width={188} height={105} className={`${styles.logo}`}/>
