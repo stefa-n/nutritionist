@@ -77,18 +77,16 @@ export default function Topbar({ value }) {
     }
 
     useEffect(() => {
-        setTimeout(() => {
-            if (value == Value) return;
-            if (router.pathname === "/" && Value === "") return;
-            if(Value === "") {
-                router.push("/");
-                console.log("Pushing to /");
-            } else if (router.query.query != Value) {
-                console.log(router.query.query, Value)
-                console.log("Pushing to /routes/search?query=" + Value);
-                router.push("/routes/search?query=" + Value);
-            }
-        }, 10);
+        if (value == Value) return;
+        if (router.pathname === "/" && Value === "") return;
+        if(Value === "") {
+            router.push("/");
+            console.log("Pushing to /");
+        } else if (router.query.query != Value) {
+            console.log(router.query.query, Value)
+            console.log("Pushing to /routes/search?query=" + Value);
+            router.push("/routes/search?query=" + Value);
+        }
     })
 
     // <Image src={require("@/public/images/logo.svg")} alt="Nutritionist" width={188} height={105} className={`${styles.logo}`}/>

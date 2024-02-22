@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useRouter } from "next/router";
+import { useState } from "react";
 
 import { supabase } from "@/pages/index";
 import styles from "@/styles/Home.module.css";
@@ -8,7 +8,7 @@ import Topbar from "@/components/Topbar";
 import Card from "@/components/Card";
 import Produs from "@/components/produs";
 
-export default function Search({ query, products }) {
+export default function Search({ query, products, existaProduse }) {
   const cautare = query;
 
   return (
@@ -21,7 +21,7 @@ export default function Search({ query, products }) {
       <main className={`${styles.main}`}>
         <Topbar value={cautare}/>
         <div className={`${styles.grid}`}>
-          {products.map((product) => (
+          {existaProduse && products.map((product) => (
             <div>
               <Card key={product.id} brand={product.brand} name={product.product_name} image={product.image} calories={product.kcal} nutriscore={0} novascore={0} onClick={() => {
                 document.getElementsByClassName("product." + product.id)[0].style.display = "flex"
@@ -39,8 +39,8 @@ export default function Search({ query, products }) {
 
 export async function getServerSideProps(context) {
     const { query } = context.query;
-    
-    console.log("Searching for products with name containing " + query + " in database");
+    let existaProduse = true;
+
     var { data, error } = await supabase
         .from('products')
         .select('*')
@@ -53,21 +53,26 @@ export async function getServerSideProps(context) {
         .select('*')
         .ilike('brand', `%${query}%`)
 
+    if(data[0] == undefined || data[0] == null || data[0][0] != undefined || data[0][0] != null)
+      existaProduse = false;
+
     produse.push(data);
 
-    for (let i = 0; i < data.length; i++) {
-        const { data } = supabase
-            .storage
-            .from('products')
-            .getPublicUrl(`${produse[i][0].barcode}.${produse[i][0].image_format}`)
+    if(existaProduse)
+      for (let i = 0; i < data.length; i++) {
+          const { data } = supabase
+              .storage
+              .from('products')
+              .getPublicUrl(`${produse[i][0].barcode}.${produse[i][0].image_format}`)
 
-        produse[i][0].image = `${data.publicUrl}`
-    }
+          produse[i][0].image = `${data.publicUrl}`
+      }
 
     return {
         props: {
             query: query,
-            products: produse[0]
+            products: produse[0],
+            existaProduse: existaProduse
         }
     }
 }
