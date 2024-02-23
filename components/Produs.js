@@ -1,4 +1,3 @@
-import Head from "next/head";
 import Image from "next/image";
 
 import styles from "@/styles/routes/produs.module.css";
@@ -6,7 +5,6 @@ import styles from "@/styles/routes/produs.module.css";
 import Tooltip from "@/components/produs/Tooltip";
 
 import { supabase } from "@/pages/index";
-import { useState } from "react";
 
 export default function Produs({ produs }) {
     const ingredients = produs.ingredients.split(', ')
