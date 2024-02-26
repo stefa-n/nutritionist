@@ -6,7 +6,7 @@ import styles from "@/styles/Home.module.css";
 
 import Topbar from "@/components/Topbar";
 import Card from "@/components/Card";
-import Produs from "@/components/produs";
+import Produs from "@/components/Produs";
 
 export default function Search({ query, products, existaProduse }) {
   const cautare = query;
