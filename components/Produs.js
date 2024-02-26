@@ -22,7 +22,7 @@ export default function Produs({ key, produs }) {
     return (
     <div>
         <div className={styles.card}>
-            <div key={key} className={styles.inapoi} onClick={() => {inapoi()}}>
+            <div key={produs.id} className={styles.inapoi} onClick={() => {inapoi()}}>
                 Inapoi
             </div>
             <div className={styles.wrapper}>

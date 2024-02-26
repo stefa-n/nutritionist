@@ -18,3 +18,9 @@
 .text {
     font-size: 0.75rem;
 }
+
+@media (max-width : 1000px) {
+    .wrapper {
+        min-width: 80px;
+    }
+  }
