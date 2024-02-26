@@ -22,7 +22,7 @@ export default function Search({ query, products, existaProduse }) {
         <Topbar value={cautare}/>
         <div className={`${styles.grid}`}>
           {products.map((product) => (
-            <div>
+            <div key={product.id}>
               <Card key={product.id} brand={product.brand} name={product.product_name} image={product.image} calories={product.kcal} nutriscore={0} novascore={0} onClick={() => {
                 document.getElementsByClassName("product." + product.id)[0].style.display = "flex"
               }}/>
