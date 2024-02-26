@@ -21,7 +21,7 @@ export default function Search({ query, products, existaProduse }) {
       <main className={`${styles.main}`}>
         <Topbar value={cautare}/>
         <div className={`${styles.grid}`}>
-          {existaProduse && products.map((product) => (
+          {products.map((product) => (
             <div>
               <Card key={product.id} brand={product.brand} name={product.product_name} image={product.image} calories={product.kcal} nutriscore={0} novascore={0} onClick={() => {
                 document.getElementsByClassName("product." + product.id)[0].style.display = "flex"
@@ -39,7 +39,6 @@ export default function Search({ query, products, existaProduse }) {
 
 export async function getServerSideProps(context) {
     const { query } = context.query;
-    let existaProduse = true;
 
     var { data, error } = await supabase
         .from('products')
@@ -53,26 +52,21 @@ export async function getServerSideProps(context) {
         .select('*')
         .ilike('brand', `%${query}%`)
 
-    if(data[0] == undefined || data[0] == null || data[0][0] != undefined || data[0][0] != null)
-      existaProduse = false;
-
     produse.push(data);
 
-    if(existaProduse)
-      for (let i = 0; i < data.length; i++) {
-          const { data } = supabase
-              .storage
-              .from('products')
-              .getPublicUrl(`${produse[i][0].barcode}.${produse[i][0].image_format}`)
+    for (let i = 0; i < data.length; i++) {
+        const { data } = supabase
+            .storage
+            .from('products')
+            .getPublicUrl(`${produse[i][0] ? produse[i][0].barcode : ""}.${produse[i][0] ? produse[i][0].image_format : ""}`)
 
-          produse[i][0].image = `${data.publicUrl}`
-      }
+        produse[i][0].image = `${data.publicUrl}`
+    }
 
     return {
         props: {
             query: query,
-            products: produse[0],
-            existaProduse: existaProduse
+            products: produse[0]
         }
     }
 }

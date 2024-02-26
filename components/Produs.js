@@ -6,7 +6,7 @@ import Tooltip from "@/components/produs/Tooltip";
 
 import { supabase } from "@/pages/index";
 
-export default function Produs({ produs }) {
+export default function Produs({ key, produs }) {
     const ingredients = produs.ingredients.split(', ')
     var allergens = []
 
@@ -20,7 +20,7 @@ export default function Produs({ produs }) {
     }
 
     return (
-    <>
+    <div key={key}>
         <div className={styles.card}>
             <div className={styles.inapoi} onClick={() => {inapoi()}}>
                 Inapoi
@@ -55,7 +55,7 @@ export default function Produs({ produs }) {
                 </div>
             </div>
         </div>
-    </>
+    </div>
   );
 }
 

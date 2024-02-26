@@ -93,7 +93,7 @@ export default function Topbar({ value }) {
     return (
         <div className={styles.wrapper}>
             <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}}>
-                <input value={Value} className={`${styles.searchBar}`} type="text" placeholder="Caută produse..." onChange={(e) => valueChanged(e)}/>
+                <input value={Value} className={styles.searchBar} type="text" placeholder="Caută produse..." onChange={(e) => valueChanged(e)}/>
                 <div className={`${styles.categories}`}>
                     <div className={`${styles.calories}`} onClick={changeCalories}>
                         <Image src={require("@/public/images/icons/cals.png")} className={styles.categoryImages} alt="Tooltip" />Calorii: {calories} <span style={{fontSize: '12px', margin: 0}}>kcal</span>
