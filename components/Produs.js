@@ -20,9 +20,9 @@ export default function Produs({ key, produs }) {
     }
 
     return (
-    <div key={key}>
+    <div>
         <div className={styles.card}>
-            <div className={styles.inapoi} onClick={() => {inapoi()}}>
+            <div key={key} className={styles.inapoi} onClick={() => {inapoi()}}>
                 Inapoi
             </div>
             <div className={styles.wrapper}>
