@@ -43,30 +43,31 @@ export async function getServerSideProps(context) {
     var { data, error } = await supabase
         .from('products')
         .select('*')
-        .ilike('product_name', `%${query}%`)
 
-    const produse = data;
+    const produse = data.filter(obj => {
+        for (let key in obj) {
+            if (obj[key] === null || obj[key] === undefined) {
+                continue;
+              }
+            if (obj[key].toString().toLowerCase().includes(query.toLowerCase())) {
+                return true;
+            }
+        }
+        return false;
+    });
 
-    var { data, error } = await supabase
-        .from('products')
-        .select('*')
-        .ilike('brand', `%${query}%`)
-
-    produse.push(data);
-
-    for (let i = 0; i < data.length; i++) {
+    produse.forEach(produs => {
         const { data } = supabase
             .storage
             .from('products')
-            .getPublicUrl(`${produse[i][0] ? produse[i][0].barcode : ""}.${produse[i][0] ? produse[i][0].image_format : ""}`)
-
-        produse[i][0].image = `${data.publicUrl}`
-    }
+            .getPublicUrl(`${produs.barcode}.${produs.image_format}`)
+        produs.image = data.publicUrl;
+    })
 
     return {
         props: {
             query: query,
-            products: produse[0]
+            products: produse
         }
     }
 }
