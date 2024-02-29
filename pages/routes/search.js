@@ -8,7 +8,7 @@ import Topbar from "@/components/Topbar";
 import Card from "@/components/Card";
 import Produs from "@/components/Produs";
 
-export default function Search({ query, products, existaProduse }) {
+export default function Search({ query, products }) {
   const cautare = query;
 
   return (
