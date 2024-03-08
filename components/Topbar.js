@@ -135,7 +135,7 @@ export default function Topbar({ value }) {
           </div>
         </div>
       </div>
-      <div onClick={() => router.push("/auth")} className={styles.cont}>
+      <div onClick={() => router.push("/login")} className={styles.cont}>
         <Image
           src={require("@/public/images/icons/cont.png")}
           alt="Cont"

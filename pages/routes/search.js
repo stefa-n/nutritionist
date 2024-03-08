@@ -27,7 +27,7 @@ export default function Search({ query, products }) {
                 document.getElementsByClassName("product." + product.id)[0].style.display = "flex"
               }}/>
               <div className={"product." + product.id} style={{display: "none", position: "absolute", zIndex: "100", top: "0", left: "0", width: "100%", height: "100%"}}>
-                <Produs key={product.id} produs={product} />
+                <Produs produs={product} />
               </div>
             </div>
           ))}
