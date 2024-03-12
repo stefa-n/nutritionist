@@ -1,5 +1,8 @@
 .main {
-  min-height: 97vh;
+  height: 100%;
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(120deg, #222 0%, #333 100%);
 }
 
 .grid {
