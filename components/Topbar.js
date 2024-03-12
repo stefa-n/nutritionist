@@ -11,7 +11,7 @@ export default function Topbar({ value }) {
   const [calories, setCalories] = useState("<500");
   const [nutriscore, setNutriscore] = useState("A");
   const [novascore, setNovascore] = useState("1");
-
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const changeCalories = () => {
     switch (calories) {
       case "<500":
@@ -75,8 +75,14 @@ export default function Topbar({ value }) {
     let value = e.target.value;
     setValue(value);
   }
-
+  async function signOut() {
+    console.log("sign out");
+    // const { error } = await supabase.auth.signOut();
+    localStorage.removeItem("access_token");
+    router.push("login");
+  }
   useEffect(() => {
+    if (localStorage.getItem("access_token") !== null) setIsLoggedIn(true);
     if (value == Value) return;
     if (router.pathname === "/" && Value === "") return;
     if (Value === "") {
@@ -135,7 +141,10 @@ export default function Topbar({ value }) {
           </div>
         </div>
       </div>
-      <div onClick={() => router.push("/login")} className={styles.cont}>
+      <div
+        onClick={() => router.push(isLoggedIn ? "/profile" : "/login")}
+        className={styles.cont}
+      >
         <Image
           src={require("@/public/images/icons/cont.png")}
           alt="Cont"
@@ -147,8 +156,13 @@ export default function Topbar({ value }) {
             marginRight: "2px",
           }}
         />
-        <span>Cont</span>
+        <span>{isLoggedIn ? "Cont" : "Login"}</span>
       </div>
+      {isLoggedIn && (
+        <div onClick={signOut} className={styles.cont}>
+          <span>Sign out</span>
+        </div>
+      )}
     </div>
   );
 }
