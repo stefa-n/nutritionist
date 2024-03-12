@@ -1,15 +1,18 @@
 @font-face {
-  font-family: 'JetBrains Mono';
-  src: url("/fonts/JetBrainsMono-Regular.woff2") format('woff2');
+  font-family: "JetBrains Mono";
+  src: url("/fonts/JetBrainsMono-Regular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
 }
 
 body {
-  background-color: #F0FEFF;
+  height: 100%;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0px !important;
 }
 
 * {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: "JetBrains Mono", monospace;
   user-select: none;
 }

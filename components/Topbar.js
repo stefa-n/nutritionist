@@ -1,86 +1,32 @@
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
-import Image from "next/image";
-import styles from "./styles/Topbar.module.css";
-
-import { useEffect, useState } from "react";
+import styles from "./styles/TopBar.module.css";
 
 export default function Topbar({ value }) {
   const router = useRouter();
-
-  const [calories, setCalories] = useState("<500");
-  const [nutriscore, setNutriscore] = useState("A");
-  const [novascore, setNovascore] = useState("1");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const changeCalories = () => {
-    switch (calories) {
-      case "<500":
-        setCalories("<1000");
-        break;
-      case "<1000":
-        setCalories("<1500");
-        break;
-      case "<1500":
-        setCalories("<2000");
-        break;
-      case "<2000":
-        setCalories("<2500");
-        break;
-      case "<2500":
-        setCalories("<500");
-        break;
-    }
-  };
-
-  const changeNutriscore = () => {
-    switch (nutriscore) {
-      case "A":
-        setNutriscore("B");
-        break;
-      case "B":
-        setNutriscore("C");
-        break;
-      case "C":
-        setNutriscore("D");
-        break;
-      case "D":
-        setNutriscore("E");
-        break;
-      case "E":
-        setNutriscore("A");
-        break;
-    }
-  };
-
-  const changeNovascore = () => {
-    switch (novascore) {
-      case "1":
-        setNovascore("2");
-        break;
-      case "2":
-        setNovascore("3");
-        break;
-      case "3":
-        setNovascore("4");
-        break;
-      case "4":
-        setNovascore("1");
-        break;
-    }
-  };
-
   const [Value, setValue] = useState(value);
+  const [filter, setFilter] = useState({
+    calories: "",
+    nutriScore: "",
+    novaScore: "",
+  });
+
+  const handleFilterChange = (event, filterType) => {
+    setFilter({ ...filter, [filterType]: event.target.value });
+  };
 
   function valueChanged(e) {
     let value = e.target.value;
     setValue(value);
   }
+
   async function signOut() {
-    console.log("sign out");
-    // const { error } = await supabase.auth.signOut();
     localStorage.removeItem("access_token");
     router.push("login");
   }
+
   useEffect(() => {
     if (localStorage.getItem("access_token") !== null) setIsLoggedIn(true);
     if (value == Value) return;
@@ -94,75 +40,73 @@ export default function Topbar({ value }) {
       router.push("/routes/search?query=" + Value);
     }
   });
-
-  // <Image src={require("@/public/images/logo.svg")} alt="Nutritionist" width={188} height={105} className={`${styles.logo}`}/>
   return (
-    <div className={styles.wrapper}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "column",
-        }}
-      >
-        <input
-          value={Value}
-          className={styles.searchBar}
-          type="text"
-          placeholder="Caută produse..."
-          onChange={(e) => valueChanged(e)}
-        />
-        <div className={`${styles.categories}`}>
-          <div className={`${styles.calories}`} onClick={changeCalories}>
-            <Image
-              src={require("@/public/images/icons/cals.png")}
-              className={styles.categoryImages}
-              alt="Tooltip"
-            />
-            Calorii: {calories}{" "}
-            <span style={{ fontSize: "12px", margin: 0 }}>kcal</span>
-          </div>
-          <div className={`${styles.nutriscore}`} onClick={changeNutriscore}>
-            <Image
-              src={require("@/public/images/icons/nutri.png")}
-              className={styles.categoryImages}
-              alt="Tooltip"
-            />
-            Nutri-score: {nutriscore}
-          </div>
-          <div className={`${styles.novascore}`} onClick={changeNovascore}>
-            <Image
-              src={require("@/public/images/icons/nova.png")}
-              className={styles.categoryImages}
-              alt="Tooltip"
-            />
-            NOVA-score: {novascore}
-          </div>
-        </div>
+    <div className={styles.topBar}>
+      <input
+        value={Value}
+        onChange={(e) => valueChanged(e)}
+        type="text"
+        placeholder="Search..."
+        className={styles.searchBar}
+      />
+      <div className={styles.filters}>
+        <select
+          value={filter.calories}
+          onChange={(e) => handleFilterChange(e, "calories")}
+          className={styles.select}
+        >
+          <option value="">Calories</option>
+          <option value="500">500</option>
+          <option value="100">100</option>
+          <option value="1500">1500</option>
+          <option value="2000">2000</option>
+        </select>
+        <select
+          value={filter.nutriScore}
+          onChange={(e) => handleFilterChange(e, "nutriScore")}
+          className={styles.select}
+        >
+          <option value="">Nutri-Score</option>
+          <option value="A">A</option>
+          <option value="B">B</option>
+          <option value="C">C</option>
+          <option value="D">D</option>
+          <option value="E">E</option>
+        </select>
+        <select
+          value={filter.novaScore}
+          onChange={(e) => handleFilterChange(e, "novaScore")}
+          className={styles.select}
+        >
+          <option value="">NOVA Score</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+        </select>
       </div>
-      <div
-        onClick={() => router.push(isLoggedIn ? "/profile" : "/login")}
-        className={styles.cont}
-      >
-        <Image
-          src={require("@/public/images/icons/cont.png")}
-          alt="Cont"
-          width={50}
-          style={{
-            width: "15px",
-            height: "auto",
-            marginTop: "2px",
-            marginRight: "2px",
-          }}
-        />
-        <span>{isLoggedIn ? "Cont" : "Login"}</span>
+      <div className={styles.userActions}>
+        {isLoggedIn ? (
+          <>
+            <button
+              onClick={() => router.push("/profile")}
+              className={styles.accountBtn}
+            >
+              Account
+            </button>
+            <button onClick={signOut} className={styles.signoutBtn}>
+              Sign Out
+            </button>
+          </>
+        ) : (
+          <button
+            onClick={() => router.push("/login")}
+            className={styles.loginBtn}
+          >
+            Log In
+          </button>
+        )}
       </div>
-      {isLoggedIn && (
-        <div onClick={signOut} className={styles.cont}>
-          <span>Sign out</span>
-        </div>
-      )}
     </div>
   );
 }
