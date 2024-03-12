@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
-import styles from "./styles/TopBar.module.css";
+import styles from "./styles/Topbar.module.css";
 
 export default function Topbar({ value }) {
   const router = useRouter();
