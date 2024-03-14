@@ -1,9 +1,9 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-import styles from "@/components/Produs/Produs.module.css";
+import styles from "@/components/styles/Produs.module.css";
 
-import Tooltip from "@/components/Produs/Tooltip";
+import Tooltip from "@/components/Produs/Tooltip.js";
 
 import { supabase } from "@/pages/index";
 

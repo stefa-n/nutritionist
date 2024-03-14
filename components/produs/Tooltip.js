@@ -1,5 +1,5 @@
 import Image from "next/image";
-import styles from "./Tooltip.module.css";
+import styles from "../styles/Tooltip.module.css";
 
 export default function Tooltip({type, text, color}) {
     return (
