@@ -43,8 +43,8 @@ const AddAlergens = () => {
     }, []);
 
     return (
-        <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', maxWidth: '350px'}}>
-            <p style={{float: 'left', width: '100%', marginRight: '2rem'}}>Allergens</p>
+        <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', maxWidth: '700px'}}>
+            <p style={{float: 'left', width: '100%', marginRight: '2rem'}}>Allergens <span style={{fontSize: '0.75rem', color: 'gray'}}>Click on an allergen to remove it</span></p>
             <input
                 type="text"
                 className={styles.input}

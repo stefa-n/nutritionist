@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from './styles/Submission.module.css';
 import { supabase } from '@/pages/index.js';
+import { jwtDecode } from 'jwt-decode';
 
 const Submission = () => {
     const [modalOpen, setModalOpen] = useState(false);
@@ -12,14 +13,16 @@ const Submission = () => {
     const [ingredients, setIngredients] = useState('');
     const [allergens, setAllergens] = useState('');
     const [kcal, setKcal] = useState('');
+    const [email, setEmail] = useState('');
 
     const handleButtonClick = () => {
-            let user = localStorage.getItem('access_token');
-            if (user === null) {
-                window.location.href = '/login';
-            } else {
-                setModalOpen(true);
-            }
+        let user = localStorage.getItem('access_token');
+        if (user === null) {
+            window.location.href = '/login';
+        } else {
+            setModalOpen(true);
+            setEmail(jwtDecode(user).email);
+        }
     };
 
     const handleModalClose = () => {
@@ -59,15 +62,7 @@ const Submission = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        const { data, error } = await supabase
-            .storage
-            .from('products')
-            .upload(barcode + "." + file.type.replace(/(.*)\//g, ''), file, {
-                cacheControl: '3600',
-                upsert: false,
-            });
-
-        const { data: productData, error: productError } = await supabase
+        let { data, error } = await supabase
             .from('products')
             .insert([
                 {
@@ -77,11 +72,26 @@ const Submission = () => {
                     ingredients: ingredients,
                     allergens: allergens,
                     kcal: kcal,
-                    image_format: file.type.replace(/(.*)\//g, '')
+                    image_format: file.type.replace(/(.*)\//g, ''),
+                    owned_by_email: email
                 },
-            ]);
+            ])
+            .select();
 
-        if (error || productError) {
+        if (error) {
+            console.error(error);
+            return;
+        }
+
+        let { error: imageError } = await supabase
+            .storage
+            .from('products')
+            .upload(data[0].id + "." + file.type.replace(/(.*)\//g, ''), file, {
+                cacheControl: '3600',
+                upsert: false,
+            });
+        
+        if (imageError) {
             console.error(error || productError);
             return;
         }
@@ -103,12 +113,12 @@ const Submission = () => {
             {modalOpen && (
                 <form className={styles.modal} onSubmit={handleSubmit}>
                     <input className={styles.input} type="file" name="image" onChange={handleFileSelected} required/>
-                    <input className={styles.input} type="text" name="barcode" placeholder="Barcode" value={barcode} onChange={handleInputChange} required/>
+                    <input className={styles.input} type="number" name="barcode" placeholder="Barcode" value={barcode} onChange={handleInputChange} required/>
                     <input className={styles.input} type="text" name="brand" placeholder="Brand" value={brand} onChange={handleInputChange} required/>
                     <input className={styles.input} type="text" name="product_name" placeholder="Product Name" value={product_name} onChange={handleInputChange} required/>
                     <input className={styles.input} type="text" name="ingredients" placeholder="Ingredients, separated by a comma" value={ingredients} onChange={handleInputChange} required/>
                     <input className={styles.input} type="text" name="allergens" placeholder="Allergens, separated by a comma" value={allergens} onChange={handleInputChange} required/>
-                    <input className={styles.input} type="text" name="kcal" placeholder="Calories" value={kcal} onChange={handleInputChange} required/>
+                    <input className={styles.input} type="number" name="kcal" placeholder="Calories / 100g" value={kcal} onChange={handleInputChange} required/>
                     <div>
                         <button className={styles.submit} type="submit">Submit</button>
                         <button className={styles.cancel} onClick={handleModalClose}>Cancel</button>

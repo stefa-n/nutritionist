@@ -13,8 +13,10 @@ export default function Card({ barcode, brand, name, image, calories, onClick })
             .then(response => response.json())
             .then(data => {
                 console.log(data);
-                setNutriscore(data.product.nutriscore_tags[0].toUpperCase());
-                setNovascore(data.product.nova_group);
+                if(data.product != null) {
+                    setNutriscore(data.product.nutriscore_tags[0].toUpperCase());
+                    setNovascore(data.product.nova_group);
+                }
             });
         }, []);
 

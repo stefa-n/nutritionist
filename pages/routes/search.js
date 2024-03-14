@@ -23,7 +23,7 @@ export default function Search({ query, products }) {
         <div className={`${styles.grid}`}>
           {products.map((product) => (
             <div key={product.id}>
-              <Card key={product.id} brand={product.brand} name={product.product_name} image={product.image} calories={product.kcal} nutriscore={0} novascore={0} onClick={() => {
+              <Card key={product.id} barcode={product.barcode} brand={product.brand} name={product.product_name} image={product.image} calories={product.kcal} nutriscore={0} novascore={0} onClick={() => {
                 document.getElementsByClassName("product." + product.id)[0].style.display = "flex"
               }}/>
               <div className={"product." + product.id} style={{display: "none", position: "absolute", zIndex: "100", top: "0", left: "0", width: "100%", height: "100%"}}>
@@ -43,6 +43,7 @@ export async function getServerSideProps(context) {
     var { data, error } = await supabase
         .from('products')
         .select('*')
+        .eq('approved', true)
 
     const produse = data.filter(obj => {
         for (let key in obj) {

@@ -42,7 +42,7 @@ export default function Produs({ produs }) {
                     <div className={styles.titleInfo}>
                         <p className={styles.title}>{produs.brand} - {produs.product_name}</p>
                         <div className={styles.tooltipWrapper}>
-                            <Tooltip type="cals" text={produs.kcal + "kcal"} color="#C3E8A6" />
+                            <Tooltip type="cals" text={produs.kcal + "kcal/100g"} color="#C3E8A6" />
                             <Tooltip type="nutri" text={"NU: 0"} color="#D0576D" />
                             <Tooltip type="nova" text={"NO: 0"} color="#F0FEFF" />
                         </div>
@@ -84,7 +84,7 @@ export async function getServerSideProps(context) {
     var { data, error } = await supabase
         .from('products')
         .select('*')
-        .eq('barcode', barcode)
+        .eq('id', id)
 
     if (error)
         return {
@@ -99,7 +99,7 @@ export async function getServerSideProps(context) {
     var { data } = supabase
         .storage
         .from('products')
-        .getPublicUrl(`${produs[0].barcode}.${produs[0].image_format}`)
+        .getPublicUrl(`${produs[0].id}.${produs[0].image_format}`)
 
     produs[0].image = `${data.publicUrl}`
 

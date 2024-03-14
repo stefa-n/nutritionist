@@ -53,18 +53,16 @@ export async function getServerSideProps() {
   const { data, error } = await supabase
     .from('products')
     .select('*')
+    .eq('approved', true)
 
   const produse = data;
-
-  console.log("\n\nGetting products from database")
 
   for (let i = 0; i < data.length; i++) {
     const { data } = supabase
       .storage
       .from('products')
-      .getPublicUrl(`${produse[i].barcode}.${produse[i].image_format}`)
+      .getPublicUrl(`${produse[i].id}.${produse[i].image_format}`)
 
-    console.log(data.publicUrl)
     produse[i].image = `${data.publicUrl}`
   }
 

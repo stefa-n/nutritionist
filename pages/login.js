@@ -64,7 +64,6 @@ export default function Login() {
         </form>
 
         <p className={styles.subtitle} style={{marginBottom: 0}}>Nu ai cont? <Link href="/signup" style={{color: 'blue', textDecoration: 'none'}}>Creează</Link></p>
-        <p className={styles.subtitle}>Ai uitat parola? <Link href="/reset" style={{color: 'blue', textDecoration: 'none'}}>Resetează</Link></p>
       </div>
     </>
   );
