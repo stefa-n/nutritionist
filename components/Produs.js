@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 import styles from "@/components/styles/Produs.module.css";
 
-import Tooltip from "@/components/Produs/Tooltip.js";
+import Tooltip from "./Produs/Tooltip";
 
 import { supabase } from "@/pages/index";
 
