@@ -12,7 +12,7 @@
 }
 
 .modal {
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -55,3 +55,10 @@
     color: white;
     width: 100%;
 }
+
+@media (max-width: 600px) {
+    .modal {
+        width: 70%;
+    }
+  }
+  

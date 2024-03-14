@@ -106,8 +106,8 @@ const Submission = () => {
                     <input className={styles.input} type="text" name="barcode" placeholder="Barcode" value={barcode} onChange={handleInputChange} required/>
                     <input className={styles.input} type="text" name="brand" placeholder="Brand" value={brand} onChange={handleInputChange} required/>
                     <input className={styles.input} type="text" name="product_name" placeholder="Product Name" value={product_name} onChange={handleInputChange} required/>
-                    <input className={styles.input} type="text" name="ingredients" placeholder="Ingredients" value={ingredients} onChange={handleInputChange} required/>
-                    <input className={styles.input} type="text" name="allergens" placeholder="Allergens" value={allergens} onChange={handleInputChange} required/>
+                    <input className={styles.input} type="text" name="ingredients" placeholder="Ingredients, separated by a comma" value={ingredients} onChange={handleInputChange} required/>
+                    <input className={styles.input} type="text" name="allergens" placeholder="Allergens, separated by a comma" value={allergens} onChange={handleInputChange} required/>
                     <input className={styles.input} type="text" name="kcal" placeholder="Calories" value={kcal} onChange={handleInputChange} required/>
                     <div>
                         <button className={styles.submit} type="submit">Submit</button>
