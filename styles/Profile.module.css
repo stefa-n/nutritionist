@@ -1,0 +1,44 @@
+.main {
+    color: white;
+    height: 100%;
+    width: 100%;
+    min-height: 100vh;
+    background: linear-gradient(120deg, #222 0%, #333 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+  
+.profile {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+  
+.avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+  
+.signout {
+    margin-left: 10px;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #555;
+    background-color: #555;
+    color: #fff;
+    cursor: pointer;
+}
+
+.home {
+    margin-left: 10px;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #C3E8A6;
+    background-color: #C3E8A6;
+    color: black;
+    cursor: pointer;
+}
