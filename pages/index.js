@@ -68,17 +68,9 @@ export async function getServerSideProps() {
 
   products = produse;
 
-  clearProducts();
-
   return {
     props: {
       products: produse
     }
   }
-}
-
-async function clearProducts() {
-  setTimeout(() => {
-    products = [];
-  }, 6000);
 }

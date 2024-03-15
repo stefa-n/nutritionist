@@ -1,0 +1,16 @@
+.main {
+    height: 100%;
+    width: 100%;
+    min-height: calc(100vh - 83px);
+    background: linear-gradient(120deg, #222 0%, #333 100%);
+}
+  
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+  
+    align-items: center;
+}
+  
