@@ -1,0 +1,23 @@
+.postList {
+  background-color: #202124;
+  color: #ffffff;
+  padding: 20px;
+}
+
+.post {
+  border: 1px solid #ffffff;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.postList h1 {
+  color: #ffffff;
+}
+
+.postList h2 {
+  color: #bb86fc;
+}
+
+.postList p {
+  color: #ffffff;
+}

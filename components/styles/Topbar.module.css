@@ -32,6 +32,15 @@
   color: #fff;
 }
 
+.forumBtn {
+  padding: 8px 15px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: 2px;
+}
+
 .userActions button {
   padding: 8px 15px;
   border-radius: 5px;
