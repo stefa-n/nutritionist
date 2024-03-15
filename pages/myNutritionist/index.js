@@ -17,6 +17,10 @@ export default function myNutritionist({ posts }) {
     <>
       <div className={styles.postList}>
         <h1>Welcome to the MyNutritionist forum</h1>
+        {/* <div>
+          <input />
+          <button>New post</button>
+        </div> */}
         {posts.map((post) => (
           <div
             key={post.id}
@@ -24,7 +28,7 @@ export default function myNutritionist({ posts }) {
             onClick={() => router.push(`/myNutritionist/${post.id}`)}
           >
             <h2>{post.title}</h2>
-            <p>{post.tag}</p>
+            <p className={styles.tag}>{post.tag}</p>
             <p>{truncateDescription(post.description, 50)}</p>
           </div>
         ))}

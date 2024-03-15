@@ -9,6 +9,9 @@
   padding: 10px;
   margin-bottom: 10px;
 }
+.post:hover {
+  cursor: pointer;
+}
 
 .postList h1 {
   color: #ffffff;
@@ -20,4 +23,12 @@
 
 .postList p {
   color: #ffffff;
+}
+
+.tag {
+  background-color: #d0576d;
+  padding: 5px;
+  display: inline;
+  text-transform: capitalize;
+  border-radius: 10px;
 }
