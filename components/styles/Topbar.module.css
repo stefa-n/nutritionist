@@ -18,27 +18,13 @@
   margin-right: 10px;
 }
 
-.filters {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.filters .select {
-  margin-left: 10px;
-  padding: 8px;
-  border-radius: 5px;
-  border: 1px solid #555;
-  background-color: #555;
-  color: #fff;
-}
-
 .userActions button {
   padding: 8px 15px;
   border-radius: 5px;
   border: none;
   cursor: pointer;
   font-size: 14px;
-  margin-left: 2px;
+  margin-left: 10px;
 }
 
 .accountBtn {

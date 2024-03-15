@@ -7,16 +7,6 @@ export default function Topbar({ value }) {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [Value, setValue] = useState(value);
-  const [filter, setFilter] = useState({
-    calories: "",
-    nutriScore: "",
-    novaScore: "",
-  });
-
-  const handleFilterChange = (event, filterType) => {
-    setFilter({ ...filter, [filterType]: event.target.value });
-  };
-
   function valueChanged(e) {
     let value = e.target.value;
     setValue(value);
@@ -49,42 +39,6 @@ export default function Topbar({ value }) {
         placeholder="Search..."
         className={styles.searchBar}
       />
-      <div className={styles.filters}>
-        <select
-          value={filter.calories}
-          onChange={(e) => handleFilterChange(e, "calories")}
-          className={styles.select}
-        >
-          <option value="">Calories</option>
-          <option value="500">500</option>
-          <option value="100">100</option>
-          <option value="1500">1500</option>
-          <option value="2000">2000</option>
-        </select>
-        <select
-          value={filter.nutriScore}
-          onChange={(e) => handleFilterChange(e, "nutriScore")}
-          className={styles.select}
-        >
-          <option value="">Nutri-Score</option>
-          <option value="A">A</option>
-          <option value="B">B</option>
-          <option value="C">C</option>
-          <option value="D">D</option>
-          <option value="E">E</option>
-        </select>
-        <select
-          value={filter.novaScore}
-          onChange={(e) => handleFilterChange(e, "novaScore")}
-          className={styles.select}
-        >
-          <option value="">NOVA Score</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-        </select>
-      </div>
       <div className={styles.userActions}>
         {isLoggedIn ? (
           <>

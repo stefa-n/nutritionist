@@ -8,6 +8,21 @@ import Tooltip from "./produs/Tooltip";
 import { supabase } from "@/pages/index";
 
 export default function Produs({ produs }) {
+    const [nutriscore, setNutriscore] = useState("");
+    const [novascore, setNovascore] = useState("");
+    
+    useEffect(() => {
+        fetch(`https://world.openfoodfacts.org/api/v0/product/${produs.barcode}.json`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if(data.product != null) {
+                    setNutriscore(data.product.nutriscore_tags[0].toUpperCase());
+                    setNovascore(data.product.nova_group);
+                }
+            });
+        }, []);
+
     const ingredients = produs.ingredients.split(', ')
     var allergens = []
 
@@ -43,8 +58,8 @@ export default function Produs({ produs }) {
                         <p className={styles.title}>{produs.brand} - {produs.product_name}</p>
                         <div className={styles.tooltipWrapper}>
                             <Tooltip type="cals" text={produs.kcal + "kcal/100g"} color="#C3E8A6" />
-                            <Tooltip type="nutri" text={"NU: 0"} color="#D0576D" />
-                            <Tooltip type="nova" text={"NO: 0"} color="#F0FEFF" />
+                            <Tooltip type="nutri" text={"NU: " + nutriscore} color="#D0576D" />
+                            <Tooltip type="nova" text={"NO: " + novascore} color="#F0FEFF" />
                         </div>
                     </div>
                 </div>

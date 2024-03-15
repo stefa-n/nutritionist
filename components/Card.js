@@ -5,8 +5,8 @@ import styles from "./styles/Card.module.css";
 import Tooltip from "./Card/Tooltip";
 
 export default function Card({ barcode, brand, name, image, calories, onClick }) {
-    const [nutriscore, setNutriscore] = useState("");
-    const [novascore, setNovascore] = useState("");
+    const [nutriscore, setNutriscore] = useState("N/A");
+    const [novascore, setNovascore] = useState("N/A");
     
     useEffect(() => {
         fetch(`https://world.openfoodfacts.org/api/v0/product/${barcode}.json`)
@@ -14,8 +14,15 @@ export default function Card({ barcode, brand, name, image, calories, onClick })
             .then(data => {
                 console.log(data);
                 if(data.product != null) {
-                    setNutriscore(data.product.nutriscore_tags[0].toUpperCase());
-                    setNovascore(data.product.nova_group);
+                    if(data.product.nova_group != null)
+                        setNovascore(data.product.nova_group);
+                    else
+                        setNovascore("N/A");
+
+                    if (data.product.nutriscore_tags[0] != null)
+                        setNutriscore(data.product.nutriscore_tags[0].toUpperCase());
+                    else
+                        setNutriscore("N/A");
                 }
             });
         }, []);
