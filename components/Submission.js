@@ -72,7 +72,7 @@ const Submission = () => {
       .eq("allergens", allergens)
       .eq("kcal", kcal);
 
-    if (productData.length > 0) {
+    if (productData && productData.length > 0) {
       approved = true;
     }
 
@@ -173,7 +173,6 @@ const Submission = () => {
             placeholder="Allergens, separated by a comma"
             value={allergens}
             onChange={handleInputChange}
-            required
           />
           <input
             className={styles.input}

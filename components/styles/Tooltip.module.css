@@ -3,7 +3,8 @@
     justify-content: center;
     align-items: center;
 
-    width: 7vw;
+    padding-left: 1vw;
+    padding-right: 1vw;
     height: 4.5vh;
 
     min-width: 80px;
@@ -16,6 +17,7 @@
 }
 
 .text {
+    color: black;
     font-size: 0.75rem;
 }
 
