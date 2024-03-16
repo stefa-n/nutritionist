@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { FaPlus } from "react-icons/fa6";
+import { FiArrowUp, FiArrowDown } from "react-icons/fi";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
@@ -54,6 +55,59 @@ export default function myNutritionist() {
     setOpen(false);
   };
 
+  const handleUpvote = async (postId) => {
+    try {
+      const { data: post, error } = await supabase
+        .from("posts")
+        .select("votes")
+        .eq("id", postId)
+        .single();
+
+      if (error) {
+        throw error;
+      }
+
+      const updatedVotes = post.votes + 1;
+      const { error: updateError } = await supabase
+        .from("posts")
+        .update({ votes: updatedVotes })
+        .eq("id", postId);
+
+      if (updateError) {
+        throw updateError;
+      }
+    } catch (error) {
+      console.error("Error upvoting post:", error.message);
+    }
+    fetchPosts();
+  };
+
+  const handleDownvote = async (postId) => {
+    try {
+      const { data: post, error } = await supabase
+        .from("posts")
+        .select("votes")
+        .eq("id", postId)
+        .single();
+
+      if (error) {
+        throw error;
+      }
+
+      const updatedVotes = Math.max(0, post.votes - 1);
+      const { error: updateError } = await supabase
+        .from("posts")
+        .update({ votes: updatedVotes })
+        .eq("id", postId);
+
+      if (updateError) {
+        throw updateError;
+      }
+    } catch (error) {
+      console.error("Error downvoting post:", error.message);
+    }
+  };
+
   useEffect(() => {
     const token = localStorage.getItem("access_token");
     if (!token) {
@@ -98,18 +152,33 @@ export default function myNutritionist() {
           </Dialog>
         </div>
         {posts.map((post) => (
-          <div
-            key={post.id}
-            className={styles.post}
-            onClick={() => router.push(`/myNutritionist/${post.id}`)}
-          >
-            <h2>{post.title}</h2>
-            <p className={styles.tag}>{post.tag}</p>
-            <ReactMarkdown
-              className={styles.markdownPreview}
-              children={truncateDescription(post.description, 50)}
-            />
-            {/* <p>{truncateDescription(post.description, 50)}</p> */}
+          <div key={post.id} className={styles.post}>
+            <div className={styles.voteContainer}>
+              <button
+                onClick={() => handleUpvote(post.id)}
+                className={styles.voteButton}
+              >
+                <FiArrowUp size={42} />
+              </button>
+              <span className={styles.voteCount}>{post.votes}</span>
+              <button
+                onClick={() => handleDownvote(post.id)}
+                className={styles.voteButton}
+              >
+                <FiArrowDown size={42} />
+              </button>
+            </div>
+            <div
+              className={styles.postContent}
+              onClick={() => router.push(`/myNutritionist/${post.id}`)}
+            >
+              <h2>{post.title}</h2>
+              <p className={styles.tag}>{post.tag}</p>
+              <ReactMarkdown
+                className={styles.markdownPreview}
+                children={truncateDescription(post.description, 50)}
+              />
+            </div>
           </div>
         ))}
       </div>
