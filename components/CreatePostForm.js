@@ -49,10 +49,8 @@ const CreatePostForm = ({ user, submit }) => {
             onChange={(e) => setDescription(e.target.value)}
             required
           />
-          <ReactMarkdown
-            className={styles.markdownPreview}
-            children={description}
-          />
+          {// eslint-disable-next-line 
+          }<ReactMarkdown className={styles.markdownPreview} children={description} />
         </div>
         <div className={styles.formGroup}>
           <label htmlFor="tags">Tags:</label>
