@@ -4,6 +4,8 @@ import { FaPlus } from "react-icons/fa6";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
+import { jwtDecode } from "jwt-decode";
+import ReactMarkdown from "react-markdown";
 
 import { supabase } from "@/pages/index";
 import styles from "@/styles/myNutritionist.module.css";
@@ -23,6 +25,8 @@ export default function myNutritionist() {
   const [Value, setValue] = useState("");
   const [posts, setPosts] = useState(null);
   const [open, setOpen] = useState(false);
+  const [user, setUser] = useState({});
+
   const fetchPosts = async (query = "") => {
     try {
       const { data, error } = await supabase
@@ -51,6 +55,13 @@ export default function myNutritionist() {
   };
 
   useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+    const decodedToken = jwtDecode(token);
+    setUser(decodedToken);
     fetchPosts();
   }, []);
 
@@ -82,7 +93,7 @@ export default function myNutritionist() {
           >
             <DialogTitle>Create a new post</DialogTitle>
             <DialogContent>
-              <CreatePostForm />
+              <CreatePostForm user={user} />
             </DialogContent>
           </Dialog>
         </div>
@@ -94,7 +105,11 @@ export default function myNutritionist() {
           >
             <h2>{post.title}</h2>
             <p className={styles.tag}>{post.tag}</p>
-            <p>{truncateDescription(post.description, 50)}</p>
+            <ReactMarkdown
+              className={styles.markdownPreview}
+              children={truncateDescription(post.description, 50)}
+            />
+            {/* <p>{truncateDescription(post.description, 50)}</p> */}
           </div>
         ))}
       </div>

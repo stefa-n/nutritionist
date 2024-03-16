@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
+
 import styles from "./styles/CreatePostForm.module.css";
 import { supabase } from "@/pages/index";
 
-const CreatePostForm = () => {
+const CreatePostForm = ({ user }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState("");
@@ -15,7 +16,7 @@ const CreatePostForm = () => {
     try {
       const { data, error } = await supabase
         .from("posts")
-        .insert([{ title, description, tag: tags }]);
+        .insert([{ title, description, tag: tags, user_id: user.sub }]);
 
       if (error) {
         throw error;
