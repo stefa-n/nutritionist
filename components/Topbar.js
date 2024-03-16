@@ -39,6 +39,14 @@ export default function Topbar({ value }) {
         placeholder="Search..."
         className={styles.searchBar}
       />
+      <div>
+        <button
+          onClick={() => router.push("/myNutritionist")}
+          className={styles.forumBtn}
+        >
+          My Nutritionist
+        </button>
+      </div>
       <div className={styles.userActions}>
         {isLoggedIn ? (
           <>

@@ -1,0 +1,94 @@
+.postList {
+  background-color: #202124;
+  color: #ffffff;
+  padding: 20px;
+}
+
+.post {
+  border: 1px solid #ffffff;
+  padding: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+.post:hover {
+  cursor: pointer;
+}
+
+.postList h1 {
+  color: #ffffff;
+}
+
+.postList h2 {
+  color: #bb86fc;
+}
+
+.postList p {
+  color: #ffffff;
+}
+
+.tag {
+  background-color: #d0576d;
+  padding: 5px;
+  display: inline;
+  text-transform: capitalize;
+  border-radius: 10px;
+}
+
+.barContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #333;
+  color: #fff;
+  padding: 20px;
+}
+.searchBar {
+  flex-grow: 1;
+  padding: 12px;
+  border-radius: 5px;
+  border: 1px solid #555;
+  background-color: #555;
+  color: #fff;
+  margin-right: 10px;
+}
+
+.postBtn {
+  padding: 8px 15px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: 2px;
+  display: flex;
+  align-items: center;
+}
+
+.voteContainer {
+  display: flex;
+  flex: 0.5;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.voteButton {
+  background-color: transparent;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.voteButton:hover {
+  color: #bb86fc;
+}
+
+.voteCount {
+  font-size: 24px;
+}
+
+.postContent {
+  flex: 9.5;
+}
