@@ -177,10 +177,8 @@ export default function MyNutritionist() {
             >
               <h2>{post.title}</h2>
               <p className={styles.tag}>{post.tag}</p>
-              <ReactMarkdown
-                className={styles.markdownPreview}
-                children={truncateDescription(post.description, 50)}
-              />
+                // eslint-disable-next-line 
+              <ReactMarkdown className={styles.markdownPreview} children={truncateDescription(post.description, 50)} />
             </div>
           </div>
         ))}
