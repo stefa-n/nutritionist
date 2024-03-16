@@ -107,6 +107,7 @@ export default function myNutritionist() {
     } catch (error) {
       console.error("Error downvoting post:", error.message);
     }
+    fetchPosts();
   };
 
   useEffect(() => {
