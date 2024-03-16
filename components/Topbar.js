@@ -7,16 +7,6 @@ export default function Topbar({ value }) {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [Value, setValue] = useState(value);
-  const [filter, setFilter] = useState({
-    calories: "",
-    nutriScore: "",
-    novaScore: "",
-  });
-
-  const handleFilterChange = (event, filterType) => {
-    setFilter({ ...filter, [filterType]: event.target.value });
-  };
-
   function valueChanged(e) {
     let value = e.target.value;
     setValue(value);

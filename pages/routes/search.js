@@ -61,7 +61,7 @@ export async function getServerSideProps(context) {
         const { data } = supabase
             .storage
             .from('products')
-            .getPublicUrl(`${produs.barcode}.${produs.image_format}`)
+            .getPublicUrl(`${produs.id}.${produs.image_format}`)
         produs.image = data.publicUrl;
     })
 
