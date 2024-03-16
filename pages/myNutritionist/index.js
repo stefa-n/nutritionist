@@ -34,7 +34,8 @@ export default function myNutritionist() {
         .from("posts")
         .select("*")
         .ilike("title", `%${query}%`)
-        .ilike("description", `%${query}%`);
+        // .ilike("description", `%${query}%`) // TODO: temporary disable description search otherwise search is broken
+        .order("created_at", { ascending: false });
       setPosts(data);
     } catch (error) {
       console.error("Error fetching posts:", error);
