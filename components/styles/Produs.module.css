@@ -38,6 +38,7 @@
 
   gap: 10%;
   padding: 5%;
+  padding-bottom: 0px;
 }
 
 .image {
@@ -78,6 +79,7 @@
 
 .ingredient:nth-child(3n) {
   background-color: #C3E8A6;
+  color: black;
 }
 
 .ingredient:nth-child(3n + 1) {
@@ -86,6 +88,7 @@
 
 .ingredient:nth-child(3n + 2) {
   background-color: #D9D9D9;
+  color: black;
 }
 
 .ingredient {

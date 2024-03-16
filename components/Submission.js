@@ -13,7 +13,8 @@ const Submission = () => {
   const [ingredients, setIngredients] = useState("");
   const [allergens, setAllergens] = useState("");
   const [kcal, setKcal] = useState("");
-  const [email, setEmail] = useState("");
+  const [weight, setWeight] = useState("");
+  const [uid, setuid] = useState("");
 
   const handleButtonClick = () => {
     let user = localStorage.getItem("access_token");
@@ -21,7 +22,7 @@ const Submission = () => {
       window.location.href = "/login";
     } else {
       setModalOpen(true);
-      setEmail(jwtDecode(user).email);
+      setuid(jwtDecode(user).sub);
     }
   };
 
@@ -54,6 +55,9 @@ const Submission = () => {
       case "kcal":
         setKcal(value);
         break;
+      case "weight":
+        setWeight(value);
+        break;
       default:
         break;
     }
@@ -70,7 +74,8 @@ const Submission = () => {
       .eq("barcode", barcode)
       .eq("ingredients", ingredients)
       .eq("allergens", allergens)
-      .eq("kcal", kcal);
+      .eq("kcal", kcal)
+      .eq("weight", weight);
 
     if (productData && productData.length > 0) {
       approved = true;
@@ -88,7 +93,7 @@ const Submission = () => {
           kcal: kcal,
           image_format: file.type.replace(/(.*)\//g, ""),
           approved: approved,
-          owned_by_email: email,
+          owned_by_uid: uid,
         },
       ])
       .select();
@@ -180,6 +185,15 @@ const Submission = () => {
             name="kcal"
             placeholder="Calories / 100g"
             value={kcal}
+            onChange={handleInputChange}
+            required
+          />
+          <input
+            className={styles.input}
+            type="number"
+            name="weight"
+            placeholder="Weight (g)"
+            value={weight}
             onChange={handleInputChange}
             required
           />

@@ -83,7 +83,7 @@ export default function Review() {
             }}
           />
           <div>
-            <div>Submitted by: {product.owned_by_email}</div>
+            <div>Submitted by: {product.owned_by_uid}</div>
             <div>Submitted at: {product.created_at}</div>
             <div>Barcode: {product.barcode}</div>
             <div>Brand: {product.brand}</div>

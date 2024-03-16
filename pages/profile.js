@@ -5,13 +5,14 @@ import { supabase } from "@/pages/index";
 import md5 from "md5"; // Import md5 for generating the Gravatar hash
 
 import styles from "@/styles/Profile.module.css";
+import ProfileData from "@/components/Profile/ProfileData";
 import AddAlergens from "@/components/Profile/AddAlergens";
 import Submissions from "@/components/Profile/Submissions";
 
 export default function Profile() {
   const router = useRouter();
 
-  const [user, setUser] = useState({ email: ""});
+  const [user, setUser] = useState({ email: "" });
   useEffect(() => {
     const token = localStorage.getItem("access_token");
     if (!token) {
@@ -34,7 +35,9 @@ export default function Profile() {
       <div className={styles.main}>
         <div className={styles.profile}>
           <img
-            src={`https://www.gravatar.com/avatar/${md5(user.email.toLowerCase())}?s=200&d=identicon`}
+            src={`https://www.gravatar.com/avatar/${md5(
+              user.email.toLowerCase()
+            )}?s=200&d=identicon`}
             alt="Profile Picture (Gravatar)"
             className={styles.avatar}
           />
@@ -42,11 +45,16 @@ export default function Profile() {
             <div>{user.email}</div>
           </div>
         </div>
+        <ProfileData />
         <AddAlergens />
         <Submissions />
-        <div style={{marginTop: '10px'}}>
-          <button onClick={signOut} className={styles.signout}>Sign out</button>
-          <button onClick={() => router.push("/")} className={styles.home}>Home</button>
+        <div style={{ marginTop: "10px" }}>
+          <button onClick={signOut} className={styles.signout}>
+            Sign out
+          </button>
+          <button onClick={() => router.push("/")} className={styles.home}>
+            Home
+          </button>
         </div>
       </div>
     </>
