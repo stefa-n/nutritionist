@@ -52,6 +52,7 @@ export default function myNutritionist() {
   };
 
   const handleClose = () => {
+    fetchPosts();
     setOpen(false);
   };
 
@@ -147,7 +148,7 @@ export default function myNutritionist() {
           >
             <DialogTitle>Create a new post</DialogTitle>
             <DialogContent>
-              <CreatePostForm user={user} />
+              <CreatePostForm user={user} submit={handleClose} />
             </DialogContent>
           </Dialog>
         </div>

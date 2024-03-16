@@ -4,11 +4,10 @@ import ReactMarkdown from "react-markdown";
 import styles from "./styles/CreatePostForm.module.css";
 import { supabase } from "@/pages/index";
 
-const CreatePostForm = ({ user }) => {
+const CreatePostForm = ({ user, submit }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState("");
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     console.log("Submitted:", { title, description, tags });
@@ -26,6 +25,7 @@ const CreatePostForm = ({ user }) => {
     } catch (error) {
       console.error("Error creating post:", error.message);
     }
+    submit();
   };
 
   return (
