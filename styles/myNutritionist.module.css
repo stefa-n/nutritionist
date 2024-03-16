@@ -32,3 +32,33 @@
   text-transform: capitalize;
   border-radius: 10px;
 }
+
+.barContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #333;
+  color: #fff;
+  padding: 20px;
+}
+.searchBar {
+  flex-grow: 1;
+  padding: 12px;
+  border-radius: 5px;
+  border: 1px solid #555;
+  background-color: #555;
+  color: #fff;
+  margin-right: 10px;
+}
+
+.postBtn {
+  padding: 8px 15px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: 2px;
+  display: flex;
+  align-items: center;
+}

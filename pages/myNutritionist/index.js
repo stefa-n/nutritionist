@@ -1,4 +1,7 @@
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { FaPlus } from "react-icons/fa6";
+
 import { supabase } from "@/pages/index";
 import styles from "@/styles/myNutritionist.module.css";
 
@@ -11,16 +14,53 @@ const truncateDescription = (description, maxWords) => {
   }
 };
 
-export default function myNutritionist({ posts }) {
+export default function myNutritionist() {
   const router = useRouter();
+  const [Value, setValue] = useState("");
+  const [posts, setPosts] = useState(null);
+
+  const fetchPosts = async (query = "") => {
+    try {
+      const { data, error } = await supabase
+        .from("posts")
+        .select("*")
+        .ilike("title", `%${query}%`)
+        .ilike("description", `%${query}%`);
+      setPosts(data);
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+    }
+  };
+
+  function valueChanged(e) {
+    let value = e.target.value;
+    setValue(value);
+    fetchPosts(value);
+  }
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+  if (!posts) {
+    return <div>Loading...</div>;
+  }
   return (
     <>
       <div className={styles.postList}>
         <h1>Welcome to the MyNutritionist forum</h1>
-        {/* <div>
-          <input />
-          <button>New post</button>
-        </div> */}
+        <div className={styles.barContainer}>
+          <input
+            value={Value}
+            onChange={(e) => valueChanged(e)}
+            type="text"
+            placeholder="Search..."
+            className={styles.searchBar}
+          />
+          <button className={styles.postBtn}>
+            <FaPlus style={{ marginRight: "0.5em" }} />
+            Create a post
+          </button>
+        </div>
         {posts.map((post) => (
           <div
             key={post.id}
@@ -35,16 +75,4 @@ export default function myNutritionist({ posts }) {
       </div>
     </>
   );
-}
-
-export async function getServerSideProps() {
-  const { data, error } = await supabase.from("posts").select("*");
-
-  const posts = data;
-
-  return {
-    props: {
-      posts,
-    },
-  };
 }
