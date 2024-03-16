@@ -21,7 +21,7 @@ const truncateDescription = (description, maxWords) => {
   }
 };
 
-export default function myNutritionist() {
+export default function MyNutritionist() {
   const router = useRouter();
   const [Value, setValue] = useState("");
   const [posts, setPosts] = useState(null);
