@@ -1,5 +1,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { formatDistanceToNow } from "date-fns";
+import { jwtDecode } from "jwt-decode";
 
 import styles from "@/components/styles/Produs.module.css";
 
@@ -10,7 +12,45 @@ import { supabase } from "@/pages/index";
 export default function Produs({ produs }) {
   const [nutriscore, setNutriscore] = useState("");
   const [novascore, setNovascore] = useState("");
+  const [user, setUser] = useState({});
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState("");
 
+  const fetchComments = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("product_comments")
+        .select("*")
+        .eq("product_id", produs.id)
+        .order("created_at", { ascending: false });
+      setComments(data);
+    } catch (error) {
+      console.error("Error fetching post:", error);
+    }
+  };
+
+  const handleUpload = async () => {
+    try {
+      const { data, error } = await supabase.from("product_comments").insert([
+        {
+          text: newComment,
+          product_id: produs.id,
+          user_id: user.sub,
+          username: user.email,
+        },
+      ]);
+
+      if (error) {
+        throw error;
+      }
+
+      console.log("Post created successfully:", data);
+    } catch (error) {
+      console.error("Error creating post:", error.message);
+    }
+    setNewComment("");
+    fetchComments();
+  };
   useEffect(() => {
     fetch(
       `https://world.openfoodfacts.org/api/v0/product/${produs.barcode}.json`
@@ -23,6 +63,12 @@ export default function Produs({ produs }) {
           setNovascore(data.product.nova_group);
         }
       });
+    const token = localStorage.getItem("access_token");
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      setUser(decodedToken);
+    }
+    fetchComments();
   }, []);
 
   const ingredients = produs.ingredients.split(", ");
@@ -128,6 +174,37 @@ export default function Produs({ produs }) {
               >
                 {allergen}
               </span>
+            ))}
+          </div>
+          <div>
+            <p className={styles.infoTitle}>Comments:</p>
+            {user && user.email && (
+              <div className={styles.commentBox}>
+                <textarea
+                  className={styles.commentInput}
+                  id="newComment"
+                  placeholder="Type your comment here..."
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                  required
+                />
+                <button className={styles.uploadButton} onClick={handleUpload}>
+                  Upload
+                </button>
+              </div>
+            )}
+            {comments.map((comment) => (
+              <div className={styles.comment} key={comment.id}>
+                <div className={styles.commentDetails}>
+                  <span className={styles.commentUser}>{comment.username}</span>
+                  <span className={styles.commentDate}>
+                    {formatDistanceToNow(new Date(comment.created_at), {
+                      addSuffix: true,
+                    })}
+                  </span>
+                </div>
+                <div className={styles.commentText}>{comment.text}</div>
+              </div>
             ))}
           </div>
         </div>
