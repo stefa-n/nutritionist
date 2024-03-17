@@ -8,6 +8,7 @@ import styles from "@/styles/Profile.module.css";
 import ProfileData from "@/components/Profile/ProfileData";
 import AddAlergens from "@/components/Profile/AddAlergens";
 import Submissions from "@/components/Profile/Submissions";
+import Topbar from "@/components/Topbar";
 
 export default function Profile() {
   const router = useRouter();
@@ -32,6 +33,7 @@ export default function Profile() {
 
   return (
     <>
+      <Topbar profile={true} />
       <div className={styles.main}>
         <div className={styles.profile}>
           <img
@@ -48,14 +50,6 @@ export default function Profile() {
         <ProfileData />
         <AddAlergens />
         <Submissions />
-        <div style={{ marginTop: "10px" }}>
-          <button onClick={signOut} className={styles.signout}>
-            Sign out
-          </button>
-          <button onClick={() => router.push("/")} className={styles.home}>
-            Home
-          </button>
-        </div>
       </div>
     </>
   );

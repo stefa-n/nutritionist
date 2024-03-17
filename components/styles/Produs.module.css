@@ -9,12 +9,15 @@
   transform: translateX(-50%);
 
   width: 70vw;
-  min-height: 80vh;
+  max-height: 90vh;
 
   background-color: #333;
   border-radius: 10px;
 
   border: 2px solid #555;
+  padding-bottom: 2rem;
+
+  overflow-y: auto;
 }
 
 .inapoi {

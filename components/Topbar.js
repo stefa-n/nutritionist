@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 
 import styles from "./styles/Topbar.module.css";
 
-export default function Topbar({ value }) {
+export default function Topbar({ value, profile }) {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [Value, setValue] = useState(value);
@@ -38,6 +38,7 @@ export default function Topbar({ value }) {
         type="text"
         placeholder="Search..."
         className={styles.searchBar}
+        id="searchBar"
       />
       <div>
         <button
@@ -50,12 +51,21 @@ export default function Topbar({ value }) {
       <div className={styles.userActions}>
         {isLoggedIn ? (
           <>
-            <button
-              onClick={() => router.push("/profile")}
-              className={styles.accountBtn}
-            >
-              Account
-            </button>
+            {profile ? (
+              <button
+                onClick={() => router.push("/")}
+                className={styles.accountBtn}
+              >
+                Home
+              </button>
+            ) : (
+              <button
+                onClick={() => router.push("/profile")}
+                className={styles.accountBtn}
+              >
+                Account
+              </button>
+            )}
             <button onClick={signOut} className={styles.signoutBtn}>
               Sign Out
             </button>
