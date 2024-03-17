@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
+import { signOut } from "@/components/Auth/Auth";
+
 import styles from "./styles/Topbar.module.css";
 
 export default function Topbar({ value, profile }) {
@@ -10,11 +12,6 @@ export default function Topbar({ value, profile }) {
   function valueChanged(e) {
     let value = e.target.value;
     setValue(value);
-  }
-
-  async function signOut() {
-    localStorage.removeItem("access_token");
-    router.push("login");
   }
 
   useEffect(() => {

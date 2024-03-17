@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./styles/Submission.module.css";
 import { supabase } from "@/pages/index.js";
 import { jwtDecode } from "jwt-decode";
+import { checkValid } from "@/components/Auth/Auth";
 
 const Submission = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -23,6 +24,8 @@ const Submission = () => {
     } else {
       setModalOpen(true);
       setuid(jwtDecode(user).sub);
+
+      checkValid(user);
     }
   };
 
