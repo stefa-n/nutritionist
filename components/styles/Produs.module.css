@@ -210,3 +210,26 @@
 .uploadButton:hover {
   background-color: #0056b3;
 }
+
+.voteContainer {
+  display: flex;
+  flex: 0.5;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.voteButton {
+  background-color: transparent;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.voteButton:hover {
+  color: #bb86fc;
+}
+
+.voteCount {
+  font-size: 24px;
+}

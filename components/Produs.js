@@ -2,6 +2,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { jwtDecode } from "jwt-decode";
+import { FiArrowUp, FiArrowDown } from "react-icons/fi";
 
 import styles from "@/components/styles/Produs.module.css";
 
@@ -9,7 +10,7 @@ import Tooltip from "./produs/Tooltip";
 
 import { supabase } from "@/pages/index";
 
-export default function Produs({ produs }) {
+export default function Produs({ produs, onVote }) {
   const [nutriscore, setNutriscore] = useState("");
   const [novascore, setNovascore] = useState("");
   const [user, setUser] = useState({});
@@ -50,6 +51,60 @@ export default function Produs({ produs }) {
     }
     setNewComment("");
     fetchComments();
+  };
+
+  const handleUpvote = async (postId) => {
+    try {
+      const { data: product, error } = await supabase
+        .from("products")
+        .select("votes")
+        .eq("id", postId)
+        .single();
+
+      if (error) {
+        throw error;
+      }
+
+      const updatedVotes = product.votes + 1;
+      const { error: updateError } = await supabase
+        .from("products")
+        .update({ votes: updatedVotes })
+        .eq("id", produs.id);
+
+      if (updateError) {
+        throw updateError;
+      }
+    } catch (error) {
+      console.error("Error upvoting product:", error.message);
+    }
+    onVote();
+  };
+
+  const handleDownvote = async (postId) => {
+    try {
+      const { data: product, error } = await supabase
+        .from("products")
+        .select("votes")
+        .eq("id", postId)
+        .single();
+
+      if (error) {
+        throw error;
+      }
+
+      const updatedVotes = product.votes - 1;
+      const { error: updateError } = await supabase
+        .from("products")
+        .update({ votes: updatedVotes })
+        .eq("id", produs.id);
+
+      if (updateError) {
+        throw updateError;
+      }
+    } catch (error) {
+      console.error("Error upvoting product:", error.message);
+    }
+    onVote();
   };
   useEffect(() => {
     fetch(
@@ -104,6 +159,21 @@ export default function Produs({ produs }) {
           Inapoi
         </div>
         <div className={styles.wrapper}>
+          <div className={styles.voteContainer}>
+            <button
+              onClick={() => handleUpvote(produs.id)}
+              className={styles.voteButton}
+            >
+              <FiArrowUp size={42} />
+            </button>
+            <span className={styles.voteCount}>{produs.votes}</span>
+            <button
+              onClick={() => handleDownvote(produs.id)}
+              className={styles.voteButton}
+            >
+              <FiArrowDown size={42} />
+            </button>
+          </div>
           <div style={{ width: "200px" }}>
             <Image
               src={produs.image}

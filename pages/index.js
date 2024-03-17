@@ -9,11 +9,38 @@ import Produs from "@/components/Produs";
 import Submission from "@/components/Submission";
 
 import { createClient } from "@supabase/supabase-js";
-export const supabase = createClient('https://devjuheafwjammjnxthd.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRldmp1aGVhZndqYW1tam54dGhkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcwODI4MTg5MiwiZXhwIjoyMDIzODU3ODkyfQ.RHiqiCEAMLAoJVJ-F07Hcby3MmjR5HpC_su0DbDsFS4')
+import { useEffect, useState } from "react";
+export const supabase = createClient(
+  "https://devjuheafwjammjnxthd.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRldmp1aGVhZndqYW1tam54dGhkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcwODI4MTg5MiwiZXhwIjoyMDIzODU3ODkyfQ.RHiqiCEAMLAoJVJ-F07Hcby3MmjR5HpC_su0DbDsFS4"
+);
 
 var products = [];
 
-export default function Home({ products }) {
+export default function Home() {
+  const [products, setProducts] = useState([]);
+  const fetchProduse = async () => {
+    const { data, error } = await supabase
+      .from("products")
+      .select("*")
+      .eq("approved", true);
+
+    const produse = data;
+
+    for (let i = 0; i < data.length; i++) {
+      const { data } = supabase.storage
+        .from("products")
+        .getPublicUrl(`${produse[i].id}.${produse[i].image_format}`);
+
+      produse[i].image = `${data.publicUrl}`;
+    }
+
+    setProducts(produse);
+  };
+
+  useEffect(() => {
+    fetchProduse();
+  });
   return (
     <>
       <Head>
@@ -22,55 +49,42 @@ export default function Home({ products }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={`${styles.main}`}>
-        <Topbar value=""/>
+        <Topbar value="" />
         <div className={`${styles.grid}`}>
           {products.map((product) => (
-              <div key={product.id}>
-                <Card barcode={product.barcode} key={product.id} brand={product.brand} name={product.product_name} image={product.image} calories={product.kcal} onClick={() => {
-                  document.getElementsByClassName("product." + product.id)[0].style.display = "flex"
-                }}/>
-                <div className={"product." + product.id} style={{display: "none", position: "absolute", zIndex: "100", top: "0", left: "0", width: "100%", height: "100%"}}>
-                  <Produs produs={product} />
-                </div>
+            <div key={product.id}>
+              <Card
+                barcode={product.barcode}
+                key={product.id}
+                brand={product.brand}
+                name={product.product_name}
+                image={product.image}
+                calories={product.kcal}
+                onClick={() => {
+                  document.getElementsByClassName(
+                    "product." + product.id
+                  )[0].style.display = "flex";
+                }}
+              />
+              <div
+                className={"product." + product.id}
+                style={{
+                  display: "none",
+                  position: "absolute",
+                  zIndex: "100",
+                  top: "0",
+                  left: "0",
+                  width: "100%",
+                  height: "100%",
+                }}
+              >
+                <Produs produs={product} onVote={fetchProduse} />
               </div>
+            </div>
           ))}
         </div>
       </main>
       <Submission />
     </>
   );
-}
-
-export async function getServerSideProps() {
-  if (products.length > 0) {
-    return {
-      props: {
-        products: products
-      }
-    }
-  }
-  
-  const { data, error } = await supabase
-    .from('products')
-    .select('*')
-    .eq('approved', true)
-
-  const produse = data;
-
-  for (let i = 0; i < data.length; i++) {
-    const { data } = supabase
-      .storage
-      .from('products')
-      .getPublicUrl(`${produse[i].id}.${produse[i].image_format}`)
-
-    produse[i].image = `${data.publicUrl}`
-  }
-
-  products = produse;
-
-  return {
-    props: {
-      products: produse
-    }
-  }
 }
