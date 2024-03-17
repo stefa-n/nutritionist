@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/router";
-import { supabase } from "@/pages/index";
-import md5 from "md5"; // Import md5 for generating the Gravatar hash
+import md5 from "md5";
 
 import styles from "@/styles/Profile.module.css";
 import ProfileData from "@/components/Profile/ProfileData";

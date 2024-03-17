@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import Router from "next/router";
 import Card from "../Card";
 import styles from "../styles/Submissions.module.css";
+import EditSubmission from "./EditSubmission";
+import { supabase } from "@/pages";
 
 const Submissions = () => {
   const [submissions, setSubmissions] = useState([]);
@@ -48,7 +50,20 @@ const Submissions = () => {
               name={product.product_name}
               image={product.image}
               calories={product.kcal}
+              subtitle={!product.approved ? "Pending Approval" : null}
+              onClick={
+                !product.approved
+                  ? () => {
+                      document.getElementById(
+                        "submission." + product.id
+                      ).style.display = "";
+                    }
+                  : null
+              }
             />
+            {!product.approved ? (
+              <EditSubmission product={product} supabase={supabase} />
+            ) : null}
           </div>
         ))}
       </div>

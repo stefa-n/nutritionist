@@ -10,13 +10,20 @@
     margin: auto;
     display: block;
     width: auto;
-    height: 100%;
+    height: auto;
+    max-width: 317.72px;
     max-height: calc(326.03px - 113.11px);
 }
 
 .title {
     color: black;
     padding: 0 10px 0 10px;
+}
+
+.subtitle {
+    color: black;
+    padding: 0 10px 0 10px;
+    font-size: 1rem;
 }
 
 .textArea {

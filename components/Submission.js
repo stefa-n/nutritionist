@@ -88,14 +88,15 @@ const Submission = () => {
       .from("products")
       .insert([
         {
-          barcode: barcode,
-          brand: brand,
-          product_name: product_name,
-          ingredients: ingredients,
-          allergens: allergens,
-          kcal: kcal,
+          barcode,
+          brand,
+          product_name,
+          ingredients,
+          allergens,
+          kcal,
+          weight,
           image_format: file.type.replace(/(.*)\//g, ""),
-          approved: approved,
+          approved,
           owned_by_uid: uid,
         },
       ])
