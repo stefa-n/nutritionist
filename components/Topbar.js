@@ -5,13 +5,14 @@ import { signOut } from "@/components/Auth/Auth";
 
 import styles from "./styles/Topbar.module.css";
 
-export default function Topbar({ value, profile }) {
+export default function Topbar({ value, profile, onSearch }) {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [Value, setValue] = useState(value);
   function valueChanged(e) {
     let value = e.target.value;
     setValue(value);
+    onSearch(value);
   }
 
   useEffect(() => {
@@ -19,12 +20,12 @@ export default function Topbar({ value, profile }) {
     if (value == Value) return;
     if (router.pathname === "/" && Value === "") return;
     if (Value === "") {
-      router.push("/");
-      console.log("Pushing to /");
+      // router.push("/");
+      // console.log("Pushing to /");
     } else if (router.query.query != Value) {
-      console.log(router.query.query, Value);
-      console.log("Pushing to /routes/search?query=" + Value);
-      router.push("/routes/search?query=" + Value);
+      // console.log(router.query.query, Value);
+      // console.log("Pushing to /routes/search?query=" + Value);
+      // router.push("/routes/search?query=" + Value);
     }
   });
   return (

@@ -19,12 +19,13 @@ var products = [];
 
 export default function Home() {
   const [products, setProducts] = useState([]);
-  const fetchProduse = async () => {
+  const fetchProduse = async (query = "") => {
     const { data, error } = await supabase
       .from("products")
       .select("*")
-      .eq("approved", true);
-
+      .eq("approved", true)
+      .ilike("product_name", `%${query}%`)
+      .order("health_score", { ascending: false });
     const produse = data;
 
     for (let i = 0; i < data.length; i++) {
@@ -40,7 +41,7 @@ export default function Home() {
 
   useEffect(() => {
     fetchProduse();
-  });
+  }, []);
   return (
     <>
       <Head>
@@ -49,7 +50,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={`${styles.main}`}>
-        <Topbar value="" />
+        <Topbar value="" onSearch={fetchProduse} />
         <div className={`${styles.grid}`}>
           {products.map((product) => (
             <div key={product.id}>
@@ -60,6 +61,7 @@ export default function Home() {
                 name={product.product_name}
                 image={product.image}
                 calories={product.kcal}
+                healthScore={product.health_score}
                 onClick={() => {
                   document.getElementsByClassName(
                     "product." + product.id

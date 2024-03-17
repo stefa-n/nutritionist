@@ -4,6 +4,21 @@ import Image from "next/image";
 import styles from "./styles/Card.module.css";
 import Tooltip from "./Card/Tooltip";
 
+const nutri_dict = {
+  A: 4,
+  B: 3,
+  C: 2,
+  D: 1,
+  E: 0,
+};
+
+const nova_dict = {
+  1: 4,
+  2: 3,
+  3: 2,
+  4: 1,
+};
+
 export default function Card({
   barcode,
   brand,
@@ -12,9 +27,10 @@ export default function Card({
   calories,
   onClick,
   subtitle,
+  healthScore,
 }) {
-  const [nutriscore, setNutriscore] = useState("N/A");
-  const [novascore, setNovascore] = useState("N/A");
+  const [nutriscore, setNutriscore] = useState(0);
+  const [novascore, setNovascore] = useState(0);
 
   useEffect(() => {
     fetch(`https://world.openfoodfacts.org/api/v0/product/${barcode}.json`)
@@ -23,12 +39,14 @@ export default function Card({
         console.log(data);
         if (data.product != null) {
           if (data.product.nova_group != null)
-            setNovascore(data.product.nova_group);
-          else setNovascore("N/A");
+            setNovascore(nova_dict[data.product.nova_group]);
+          else setNovascore(0);
 
           if (data.product.nutriscore_tags[0] != null)
-            setNutriscore(data.product.nutriscore_tags[0].toUpperCase());
-          else setNutriscore("N/A");
+            setNutriscore(
+              nutri_dict[data.product.nutriscore_tags[0].toUpperCase()]
+            );
+          else setNutriscore(0);
         }
       });
   }, []);
@@ -62,8 +80,11 @@ export default function Card({
           {!subtitle ? (
             <>
               <Tooltip type="cals" text={calories + "kcal"} color="#C3E8A6" />
-              <Tooltip type="nutri" text={"NU:" + nutriscore} color="#D0576D" />
-              <Tooltip type="nova" text={"NO:" + novascore} color="#F0FEFF" />
+              <Tooltip
+                type="nutri"
+                text={"Health score:" + healthScore.toFixed(2)}
+                color="#D0576D"
+              />
             </>
           ) : (
             <></>

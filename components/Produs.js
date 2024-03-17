@@ -10,6 +10,23 @@ import Tooltip from "./produs/Tooltip";
 
 import { supabase } from "@/pages/index";
 
+const nutri_dict = {
+  A: 4,
+  B: 3,
+  C: 2,
+  D: 1,
+  E: 0,
+  undefined: 0,
+};
+
+const nova_dict = {
+  1: 4,
+  2: 3,
+  3: 2,
+  4: 1,
+  undefined: 1,
+};
+
 export default function Produs({ produs, onVote }) {
   const [nutriscore, setNutriscore] = useState("");
   const [novascore, setNovascore] = useState("");
@@ -68,7 +85,11 @@ export default function Produs({ produs, onVote }) {
       const updatedVotes = product.votes + 1;
       const { error: updateError } = await supabase
         .from("products")
-        .update({ votes: updatedVotes })
+        .update({
+          votes: updatedVotes,
+          health_score:
+            (updatedVotes + nutri_dict[nutriscore] + nova_dict[novascore]) / 3,
+        })
         .eq("id", produs.id);
 
       if (updateError) {
@@ -95,7 +116,11 @@ export default function Produs({ produs, onVote }) {
       const updatedVotes = product.votes - 1;
       const { error: updateError } = await supabase
         .from("products")
-        .update({ votes: updatedVotes })
+        .update({
+          votes: updatedVotes,
+          health_score:
+            (updatedVotes + nutri_dict[nutriscore] + nova_dict[novascore]) / 3,
+        })
         .eq("id", produs.id);
 
       if (updateError) {

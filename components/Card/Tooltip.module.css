@@ -1,27 +1,24 @@
 .wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 10px;
+  height: 3.5vh;
 
-    width: 5.5vw;
-    height: 3.5vh;
-
-    max-width: 100px;
-
-    border-radius: 10px;
+  border-radius: 10px;
 }
 
 .icon {
-    margin-right: 5px;
+  margin-right: 5px;
 }
 
 .text {
-    color: black;
-    font-size: 0.75rem;
+  color: black;
+  font-size: 0.75rem;
 }
 
-@media (max-width : 1000px) {
-    .wrapper {
-        min-width: 80px;
-    }
+@media (max-width: 1000px) {
+  .wrapper {
+    min-width: 80px;
   }
+}
