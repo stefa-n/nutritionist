@@ -15,7 +15,15 @@ const CreatePostForm = ({ user, submit }) => {
     try {
       const { data, error } = await supabase
         .from("posts")
-        .insert([{ title, description, tag: tags, user_id: user.sub }]);
+        .insert([
+          {
+            title,
+            description,
+            tag: tags,
+            user_id: user.sub,
+            username: user.email,
+          },
+        ]);
 
       if (error) {
         throw error;
@@ -49,8 +57,13 @@ const CreatePostForm = ({ user, submit }) => {
             onChange={(e) => setDescription(e.target.value)}
             required
           />
-          {// eslint-disable-next-line 
-          }<ReactMarkdown className={styles.markdownPreview} children={description} />
+          {
+            // eslint-disable-next-line
+          }
+          <ReactMarkdown
+            className={styles.markdownPreview}
+            children={description}
+          />
         </div>
         <div className={styles.formGroup}>
           <label htmlFor="tags">Tags:</label>

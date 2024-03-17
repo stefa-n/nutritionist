@@ -124,3 +124,28 @@
 .uploadButton:hover {
   background-color: #0056b3;
 }
+
+.commentList {
+  background-color: #333;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.comment {
+  margin-bottom: 20px;
+}
+
+.commentText {
+  color: #fff;
+  font-size: 16px;
+}
+
+.commentDetails {
+  margin-top: 5px;
+  color: #888;
+  font-size: 14px;
+}
+
+.commentDate {
+  margin-left: 20px;
+}

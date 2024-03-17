@@ -6,6 +6,8 @@ import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import { jwtDecode } from "jwt-decode";
+import { formatDistanceToNow } from "date-fns";
+
 import ReactMarkdown from "react-markdown";
 
 import { supabase } from "@/pages/index";
@@ -175,6 +177,14 @@ export default function MyNutritionist() {
               className={styles.postContent}
               onClick={() => router.push(`/myNutritionist/${post.id}`)}
             >
+              <div className={styles.commentDetails}>
+                <span className={styles.commentUser}>{post.username}</span>
+                <span className={styles.commentDate}>
+                  {formatDistanceToNow(new Date(post.created_at), {
+                    addSuffix: true,
+                  })}
+                </span>
+              </div>
               <h2>{post.title}</h2>
               <p className={styles.tag}>{post.tag}</p>
               {

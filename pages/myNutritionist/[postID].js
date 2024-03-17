@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { supabase } from "@/pages/index";
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
+import { formatDistanceToNow } from "date-fns";
 import { FiArrowUp, FiArrowDown } from "react-icons/fi";
 import { jwtDecode } from "jwt-decode";
 
@@ -34,8 +35,8 @@ const PostDetailPage = () => {
       const { data, error } = await supabase
         .from("post_comments")
         .select("*")
-        .eq("post_id", postID);
-
+        .eq("post_id", postID)
+        .order("created_at", { ascending: false });
       setComments(data);
     } catch (error) {
       console.error("Error fetching post:", error);
@@ -44,9 +45,14 @@ const PostDetailPage = () => {
 
   const handleUpload = async () => {
     try {
-      const { data, error } = await supabase
-        .from("post_comments")
-        .insert([{ text: newComment, post_id: postID, user_id: user.sub }]);
+      const { data, error } = await supabase.from("post_comments").insert([
+        {
+          text: newComment,
+          post_id: postID,
+          user_id: user.sub,
+          username: user.email,
+        },
+      ]);
 
       if (error) {
         throw error;
@@ -152,6 +158,14 @@ const PostDetailPage = () => {
           className={styles.postContent}
           onClick={() => router.push(`/myNutritionist/${post.id}`)}
         >
+          <div className={styles.commentDetails}>
+            <span className={styles.commentUser}>{post.username}</span>
+            <span className={styles.commentDate}>
+              {formatDistanceToNow(new Date(post.created_at), {
+                addSuffix: true,
+              })}
+            </span>
+          </div>
           <h2>{post.title}</h2>
           <p className={styles.tag}>{post.tag}</p>
           {
@@ -177,7 +191,17 @@ const PostDetailPage = () => {
         </button>
       </div>
       {comments.map((comment) => (
-        <div key={comment.id}>{comment.text}</div>
+        <div className={styles.comment} key={comment.id}>
+          <div className={styles.commentDetails}>
+            <span className={styles.commentUser}>{comment.username}</span>
+            <span className={styles.commentDate}>
+              {formatDistanceToNow(new Date(comment.created_at), {
+                addSuffix: true,
+              })}
+            </span>
+          </div>
+          <div className={styles.commentText}>{comment.text}</div>
+        </div>
       ))}
     </div>
   );
