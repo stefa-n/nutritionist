@@ -51,6 +51,7 @@ const Submissions = () => {
               image={product.image}
               calories={product.kcal}
               subtitle={!product.approved ? "Pending Approval" : null}
+              healthScore={product.health_score}
               onClick={
                 !product.approved
                   ? () => {
