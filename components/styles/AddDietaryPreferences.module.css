@@ -1,25 +1,9 @@
-.input {
-    flex-grow: 1;
-    padding: 12px;
-    border-radius: 5px;
-    border: 1px solid #555;
-    background-color: #555;
-    color: #fff;
-    margin-right: 10px;
-    min-width: 285px;
-    width: 100%;
-}
-
-.ingredient:nth-child(3n) {
-    background-color: #C3E8A6;
-}
-  
-.ingredient:nth-child(3n + 1) {
+.innit {
     background-color: #D0576D;
 }
-  
-.ingredient:nth-child(3n + 2) {
-    background-color: #D9D9D9;
+
+.nuhuh {
+    background-color: #C3E8A6;
 }
   
 .ingredient {
@@ -33,6 +17,9 @@
     display: inline-block;
     
     border-radius: 10px;
+    width: auto;
+
+    cursor: pointer;
 }
 
 .button {
