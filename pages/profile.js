@@ -5,10 +5,11 @@ import md5 from "md5";
 
 import styles from "@/styles/Profile.module.css";
 import ProfileData from "@/components/Profile/ProfileData";
+import AddDietaryPreferences from "@/components/Profile/AddDietaryPreferences";
 import AddAlergens from "@/components/Profile/AddAlergens";
 import Submissions from "@/components/Profile/Submissions";
 import Topbar from "@/components/Topbar";
-import { signOut, checkValid } from "@/components/Auth/Auth";
+import { checkValid } from "@/components/Auth/Auth";
 
 export default function Profile() {
   const router = useRouter();
@@ -43,6 +44,7 @@ export default function Profile() {
           </div>
         </div>
         <ProfileData />
+        <AddDietaryPreferences />
         <AddAlergens />
         <Submissions />
       </div>

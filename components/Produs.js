@@ -32,6 +32,10 @@ export default function Produs({ produs, onVote }) {
   const [novascore, setNovascore] = useState("");
   const [user, setUser] = useState({});
   const [comments, setComments] = useState([]);
+  const [dietaryPreferences, setDietaryPreferences] = useState(["None"]);
+  const [productDietaryPreferences, setProductDietaryPreferences] = useState(
+    []
+  );
   const [newComment, setNewComment] = useState("");
 
   const fetchComments = async () => {
@@ -137,10 +141,32 @@ export default function Produs({ produs, onVote }) {
     )
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         if (data.product != null) {
           setNutriscore(data.product.nutriscore_tags[0].toUpperCase());
           setNovascore(data.product.nova_group);
+
+          let ingredients = data.product.ingredients_analysis_tags;
+
+          let string = "";
+          for (let value of ingredients) {
+            if (value.includes("en:")) {
+              if (value === "en:vegan") {
+                string += ", Vegan";
+              }
+              if (value === "en:vegetarian") {
+                string += ", Vegetarian";
+              }
+              if (value === "en:palm-oil-free") {
+                string += ", Palm-oil free";
+              }
+            }
+          }
+
+          if (string != "")
+            setProductDietaryPreferences(string.slice(2).split(", "));
+          else setProductDietaryPreferences(["None"]);
+
+          console.log(string.slice(2).split(", "));
         }
       });
     const token = localStorage.getItem("access_token");
@@ -160,9 +186,10 @@ export default function Produs({ produs, onVote }) {
   const [storedAllergens, setStoredAllergens] = useState([]);
 
   useEffect(() => {
-    const storedAllergens = localStorage.getItem("allergens");
-    if (storedAllergens) {
-      setStoredAllergens(JSON.parse(storedAllergens));
+    const storedPreferences = localStorage.getItem("dietaryPreferences");
+    if (storedPreferences) {
+      const parsedPreferences = JSON.parse(storedPreferences);
+      setDietaryPreferences(parsedPreferences);
     }
   }, []);
 
@@ -268,6 +295,38 @@ export default function Produs({ produs, onVote }) {
                 }`}
               >
                 {allergen}
+              </span>
+            ))}
+          </div>
+          <p className={styles.infoTitle}>
+            Dietary preferences:{" "}
+            <span style={{ fontSize: "12px" }}>
+              Dietary preferences set in your profile page are{" "}
+              <span
+                style={{
+                  backgroundColor: "#D0576D",
+                  paddingLeft: "5px",
+                  paddingRight: "5px",
+                  borderRadius: "5px",
+                }}
+              >
+                colored in red
+              </span>
+            </span>{" "}
+          </p>
+          <div className={styles.container}>
+            {productDietaryPreferences.map((preference) => (
+              <span
+                key={preference}
+                className={`${styles.allergen} 
+                  ${
+                    dietaryPreferences[`${preference}`] === true
+                      ? styles.inLocalStorage
+                      : ""
+                  }
+                `}
+              >
+                {preference}
               </span>
             ))}
           </div>

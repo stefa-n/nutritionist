@@ -80,16 +80,12 @@
   margin-bottom: 0;
 }
 
-.ingredient:nth-child(3n) {
+.ingredient:nth-child(2n) {
   background-color: #c3e8a6;
   color: black;
 }
 
-.ingredient:nth-child(3n + 1) {
-  background-color: #d0576d;
-}
-
-.ingredient:nth-child(3n + 2) {
+.ingredient:nth-child(2n + 1) {
   background-color: #d9d9d9;
   color: black;
 }
