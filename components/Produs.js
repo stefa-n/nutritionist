@@ -186,6 +186,12 @@ export default function Produs({ produs, onVote }) {
   const [storedAllergens, setStoredAllergens] = useState([]);
 
   useEffect(() => {
+    const a = localStorage.getItem("allergens");
+    if (a) {
+      const parsedPreferences = JSON.parse(a);
+      setStoredAllergens(a);
+    }
+
     const storedPreferences = localStorage.getItem("dietaryPreferences");
     if (storedPreferences) {
       const parsedPreferences = JSON.parse(storedPreferences);
