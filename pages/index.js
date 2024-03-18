@@ -62,6 +62,7 @@ export default function Home() {
                 image={product.image}
                 calories={product.kcal}
                 healthScore={product.health_score}
+                id={product.id}
                 onClick={() => {
                   document.getElementsByClassName(
                     "product." + product.id
