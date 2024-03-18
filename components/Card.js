@@ -1,4 +1,8 @@
 import { useEffect, useState } from "react";
+import Card2 from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
 
 import Image from "next/image";
 import styles from "./styles/Card.module.css";
@@ -52,45 +56,35 @@ export default function Card({
   }, []);
 
   return (
-    <div className={styles.wrapper} onClick={onClick}>
-      <Image
-        src={image}
-        alt={name}
-        width={300}
-        height={300}
-        className={styles.image}
-      />
-      <div className={styles.textArea}>
-        <p className={styles.title}>
-          {brand} - {name}
-        </p>
-        <p className={styles.subtitle} style={{}}>
-          {subtitle}
-        </p>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-around",
-            alignItems: "center",
-            position: "absolute",
-            bottom: "8px",
-            width: "100%",
-          }}
-        >
-          {!subtitle ? (
-            <>
-              <Tooltip type="cals" text={calories + "kcal"} color="#C3E8A6" />
-              <Tooltip
-                type="nutri"
-                text={"Health score:" + healthScore.toFixed(2)}
-                color="#D0576D"
-              />
-            </>
-          ) : (
-            <></>
-          )}
+    <Card2 className={styles.wrapper} onClick={onClick}>
+      <CardContent>
+        <CardMedia component="img" image={image} height={300} />
+        <div className={styles.textArea}>
+          <p className={styles.title}>
+            {brand} - {name}
+          </p>
+          <p className={styles.subtitle} style={{}}>
+            {subtitle}
+          </p>
+          <div>
+            {!subtitle ? (
+              <>
+                <Tooltip type="cals" text={calories + "kcal"} color="#C3E8A6" />
+                <Tooltip
+                  type="nutri"
+                  text={"Health score:" + healthScore.toFixed(2)}
+                  color="#D0576D"
+                />
+              </>
+            ) : (
+              <></>
+            )}
+          </div>
         </div>
-      </div>
-    </div>
+      </CardContent>
+      <CardActions>
+        <button className={styles.basketBtn}>Add to cart</button>
+      </CardActions>
+    </Card2>
   );
 }

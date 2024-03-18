@@ -46,6 +46,14 @@ export default function Topbar({ value, profile, onSearch }) {
           My Nutritionist
         </button>
       </div>
+      <div>
+        <button
+          onClick={() => router.push("/basket")}
+          className={styles.forumBtn}
+        >
+          Basket
+        </button>
+      </div>
       <div className={styles.userActions}>
         {isLoggedIn ? (
           <>
