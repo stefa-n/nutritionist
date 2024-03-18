@@ -32,6 +32,8 @@ export default function Card({
   onClick,
   subtitle,
   healthScore,
+  id,
+  remove,
 }) {
   const [nutriscore, setNutriscore] = useState(0);
   const [novascore, setNovascore] = useState(0);
@@ -55,9 +57,43 @@ export default function Card({
       });
   }, []);
 
+  const addToBasket = () => {
+    let basket = localStorage.getItem("basket");
+
+    if (!basket) {
+      basket = [];
+    } else {
+      basket = JSON.parse(basket);
+    }
+
+    if (!basket.includes(id)) {
+      basket.push(id);
+      localStorage.setItem("basket", JSON.stringify(basket));
+    }
+  };
+
+  const removeFromBasket = () => {
+    let basket = localStorage.getItem("basket");
+
+    if (!basket) {
+      return;
+    }
+
+    basket = JSON.parse(basket);
+
+    const indexToRemove = basket.indexOf(id);
+
+    if (indexToRemove === -1) {
+      return;
+    }
+
+    basket.splice(indexToRemove, 1);
+
+    localStorage.setItem("basket", JSON.stringify(basket));
+  };
   return (
-    <Card2 className={styles.wrapper} onClick={onClick}>
-      <CardContent>
+    <Card2 className={styles.wrapper}>
+      <CardContent onClick={onClick}>
         <CardMedia component="img" image={image} height={300} />
         <div className={styles.textArea}>
           <p className={styles.title}>
@@ -83,7 +119,16 @@ export default function Card({
         </div>
       </CardContent>
       <CardActions>
-        <button className={styles.basketBtn}>Add to cart</button>
+        {!remove && (
+          <button onClick={addToBasket} className={styles.basketBtn}>
+            Add to basket
+          </button>
+        )}
+        {remove && (
+          <button onClick={removeFromBasket} className={styles.basketBtn}>
+            Remove from basket
+          </button>
+        )}
       </CardActions>
     </Card2>
   );
