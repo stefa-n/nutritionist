@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 
 export default function Review() {
   const [product, setProduct] = useState([]);
+  const [off, setOff] = useState([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -31,6 +32,34 @@ export default function Review() {
       }
     };
     fetchProduct();
+  }, []);
+
+  // get info from openfoodfacts
+  useEffect(() => {
+    if (product.barcode) {
+      const fetchOpenFoodFacts = async () => {
+        let response = await fetch(
+          "https://world.openfoodfacts.org/api/v0/product/" +
+            product.barcode +
+            ".json"
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setOff((prev) => ({
+            ...prev,
+            brand: data.product.brands,
+            product_name: data.product.product_name,
+            ingredients: data.product.ingredients_text_en,
+            kcal: data.product.nutriments["energy-kcal_100g"],
+            weight: parseInt(data.product.quantity_imported, 10),
+            allergens: data.product.allergens_tags.map((allergen) =>
+              allergen.replace("en:", ", ")
+            ),
+          }));
+        }
+      };
+      fetchOpenFoodFacts();
+    }
   }, []);
 
   const handleApprove = async () => {
@@ -82,7 +111,7 @@ export default function Review() {
               maxHeight: "calc(326.03px - 113.11px)",
             }}
           />
-          <div>
+          <div style={{ maxWidth: "50%" }}>
             <div>Submitted by: {product.owned_by_uid}</div>
             <div>Submitted at: {product.created_at}</div>
             <div>Barcode: {product.barcode}</div>
@@ -92,6 +121,15 @@ export default function Review() {
             <div>Allergens: {product.allergens}</div>
             <div>Calories: {product.kcal}kcal/100g</div>
           </div>
+        </div>
+        <div style={{ maxWidth: "50%", marginBottom: "1rem" }}>
+          <div>OpenFoodFacts Data:</div>
+          <div>Brand: {off.brand}</div>
+          <div>Product Name: {off.product_name}</div>
+          <div>Ingredients: {off.ingredients}</div>
+          <div>Allergens: {off.allergens}</div>
+          <div>Calories: {off.kcal}kcal/100g</div>
+          <div>Weight: {off.weight}g</div>
         </div>
         <div style={{ display: "flex" }}>
           <div className={styles.approved} onClick={() => handleApprove()}>

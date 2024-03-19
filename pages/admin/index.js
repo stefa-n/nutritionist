@@ -49,6 +49,7 @@ export default function Home() {
                 name={product.product_name}
                 image={product.image}
                 calories={product.kcal}
+                healthScore={product.health_score}
                 onClick={() => {
                   router.push("/admin/review?id=" + product.id);
                 }}
