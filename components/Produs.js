@@ -74,25 +74,61 @@ export default function Produs({ produs, onVote }) {
     fetchComments();
   };
 
-  const handleUpvote = async (postId) => {
+  const handleVote = async (productId, vote) => {
     try {
       const { data: product, error } = await supabase
         .from("products")
-        .select("votes")
-        .eq("id", postId)
+        .select("*")
+        .eq("id", productId)
         .single();
 
       if (error) {
         throw error;
       }
 
-      const updatedVotes = product.votes + 1;
+      let { upvotes, downvotes } = product;
+      upvotes = upvotes || [];
+      downvotes = downvotes || [];
+
+      if (vote === 1) {
+        if (!upvotes.includes(user.sub)) {
+          upvotes.push(user.sub);
+        } else {
+          const index = upvotes.indexOf(user.sub);
+          if (index > -1) {
+            upvotes.splice(index, 1);
+          }
+        }
+        const index = downvotes.indexOf(user.sub);
+        if (index > -1) {
+          downvotes.splice(index, 1);
+        }
+      } else if (vote === -1) {
+        if (!downvotes.includes(user.sub)) {
+          downvotes.push(user.sub);
+        } else {
+          const index = downvotes.indexOf(user.sub);
+          if (index > -1) {
+            downvotes.splice(index, 1);
+          }
+        }
+        const index = upvotes.indexOf(user.sub);
+        if (index > -1) {
+          upvotes.splice(index, 1);
+        }
+      }
+
       const { error: updateError } = await supabase
         .from("products")
         .update({
-          votes: updatedVotes,
+          upvotes,
+          downvotes,
           health_score:
-            (updatedVotes + nutri_dict[nutriscore] + nova_dict[novascore]) / 3,
+            ((upvotes ? upvotes.length : 0) -
+              (downvotes ? downvotes.length : 0) +
+              nutri_dict[nutriscore] +
+              nova_dict[novascore]) /
+            3,
         })
         .eq("id", produs.id);
 
@@ -100,38 +136,7 @@ export default function Produs({ produs, onVote }) {
         throw updateError;
       }
     } catch (error) {
-      console.error("Error upvoting product:", error.message);
-    }
-    onVote();
-  };
-
-  const handleDownvote = async (postId) => {
-    try {
-      const { data: product, error } = await supabase
-        .from("products")
-        .select("votes")
-        .eq("id", postId)
-        .single();
-
-      if (error) {
-        throw error;
-      }
-
-      const updatedVotes = product.votes - 1;
-      const { error: updateError } = await supabase
-        .from("products")
-        .update({
-          votes: updatedVotes,
-          health_score:
-            (updatedVotes + nutri_dict[nutriscore] + nova_dict[novascore]) / 3,
-        })
-        .eq("id", produs.id);
-
-      if (updateError) {
-        throw updateError;
-      }
-    } catch (error) {
-      console.error("Error upvoting product:", error.message);
+      console.error("Error upvoting post:", error.message);
     }
     onVote();
   };
@@ -228,14 +233,17 @@ export default function Produs({ produs, onVote }) {
         <div className={styles.wrapper}>
           <div className={styles.voteContainer}>
             <button
-              onClick={() => handleUpvote(produs.id)}
+              onClick={() => handleVote(produs.id, 1)}
               className={styles.voteButton}
             >
               <FiArrowUp size={42} />
             </button>
-            <span className={styles.voteCount}>{produs.votes}</span>
+            <span className={styles.voteCount}>
+              {(produs.upvotes ? produs.upvotes.length : 0) -
+                (produs.downvotes ? produs.downvotes.length : 0)}
+            </span>
             <button
-              onClick={() => handleDownvote(produs.id)}
+              onClick={() => handleVote(produs.id, -1)}
               className={styles.voteButton}
             >
               <FiArrowDown size={42} />
