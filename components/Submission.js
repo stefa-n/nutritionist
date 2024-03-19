@@ -18,7 +18,6 @@ const Submission = () => {
   const [uid, setuid] = useState("");
 
   const importFromOpenFoodFacts = () => {
-    // get info from api using barcode
     fetch("https://world.openfoodfacts.org/api/v0/product/" + barcode + ".json")
       .then((response) => response.json())
       .then((data) => {
@@ -116,6 +115,7 @@ const Submission = () => {
           image_format: file.type.replace(/(.*)\//g, ""),
           approved,
           owned_by_uid: uid,
+          health_score: 0,
         },
       ])
       .select();

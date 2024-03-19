@@ -27,7 +27,7 @@
     font-size: 14px;
     margin-left: 10px;
     background-color: #4caf50;
-    color: white;
+    color: black;
 }
 
 .delete {
@@ -38,7 +38,7 @@
     font-size: 14px;
     margin-left: 10px;
     background-color: #d0576d;
-    color: white;
+    color: black;
 }
 
 .off {
@@ -49,6 +49,6 @@
     font-size: 14px;
     margin-left: 10px;
     background-color: #e6e88c;
-    color: white;
+    color: black;
     text-decoration: none;
 }
