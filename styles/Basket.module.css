@@ -6,3 +6,12 @@
 
   align-items: center;
 }
+
+.container {
+  display: flex;
+  flex-direction: row;
+}
+
+.column {
+  padding: 20px;
+}

@@ -34,6 +34,7 @@ export default function Card({
   healthScore,
   id,
   remove,
+  onRemove,
 }) {
   const [nutriscore, setNutriscore] = useState(0);
   const [novascore, setNovascore] = useState(0);
@@ -90,6 +91,7 @@ export default function Card({
     basket.splice(indexToRemove, 1);
 
     localStorage.setItem("basket", JSON.stringify(basket));
+    onRemove();
   };
   return (
     <Card2 className={styles.wrapper}>

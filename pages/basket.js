@@ -8,15 +8,16 @@ import styles from "@/styles/Basket.module.css";
 export default function Basket() {
   const [basket, setBasket] = useState([]);
   const [products, setProducts] = useState([]);
-  useEffect(() => {
-    const fetchBasketFromLocalStorage = async () => {
-      const basketString = localStorage.getItem("basket");
-      if (basketString) {
-        const basketArray = JSON.parse(basketString);
-        setBasket(basketArray);
-      }
-    };
+  const [nutritionalInfo, setNutritionalInfo] = useState({});
+  const fetchBasketFromLocalStorage = async () => {
+    const basketString = localStorage.getItem("basket");
+    if (basketString) {
+      const basketArray = JSON.parse(basketString);
+      setBasket(basketArray);
+    }
+  };
 
+  useEffect(() => {
     fetchBasketFromLocalStorage();
   }, []);
 
@@ -41,6 +42,24 @@ export default function Basket() {
         }
 
         setProducts(produse);
+        let auxNutritionalInfo = {
+          calories: 0,
+          protein: 0,
+          fat: 0,
+          carbohydrates: 0,
+          allergens: [],
+          healthScore: 0,
+        };
+        produse.forEach((produs) => {
+          console.log(produs);
+          auxNutritionalInfo.calories += produs.kcal;
+          auxNutritionalInfo.allergens = auxNutritionalInfo.allergens.concat(
+            produs.allergens.split(",").map((item) => item.trim())
+          );
+          auxNutritionalInfo.healthScore += produs.health_score;
+        });
+        auxNutritionalInfo.healthScore /= products.length;
+        setNutritionalInfo(auxNutritionalInfo);
       } catch (error) {
         console.error("Error fetching products:", error.message);
       }
@@ -52,43 +71,74 @@ export default function Basket() {
   }, [basket]);
   return (
     <>
-      <div>basket</div>
-      <div className={`${styles.grid}`}>
-        {products &&
-          products.map((product) => (
-            <div key={product.id}>
-              <Card
-                barcode={product.barcode}
-                key={product.id}
-                brand={product.brand}
-                name={product.product_name}
-                image={product.image}
-                calories={product.kcal}
-                healthScore={product.health_score}
-                id={product.id}
-                remove={true}
-                onClick={() => {
-                  document.getElementsByClassName(
-                    "product." + product.id
-                  )[0].style.display = "flex";
-                }}
-              />
-              <div
-                className={"product." + product.id}
-                style={{
-                  display: "none",
-                  position: "absolute",
-                  zIndex: "100",
-                  top: "0",
-                  left: "0",
-                  width: "100%",
-                  height: "100%",
-                }}
-              >
-                <Produs produs={product} />
-              </div>
+      <div className={styles.container}>
+        <div style={{ ...styles.column, flex: "0 0 70%" }}>
+          <h1>Your basket</h1>
+          <div className={`${styles.grid}`}>
+            {products &&
+              products.map((product) => (
+                <div key={product.id}>
+                  <Card
+                    barcode={product.barcode}
+                    key={product.id}
+                    brand={product.brand}
+                    name={product.product_name}
+                    image={product.image}
+                    calories={product.kcal}
+                    healthScore={product.health_score}
+                    id={product.id}
+                    remove={true}
+                    onRemove={fetchBasketFromLocalStorage}
+                    onClick={() => {
+                      document.getElementsByClassName(
+                        "product." + product.id
+                      )[0].style.display = "flex";
+                    }}
+                  />
+                  <div
+                    className={"product." + product.id}
+                    style={{
+                      display: "none",
+                      position: "absolute",
+                      zIndex: "100",
+                      top: "0",
+                      left: "0",
+                      width: "100%",
+                      height: "100%",
+                    }}
+                  >
+                    <Produs produs={product} />
+                  </div>
+                </div>
+              ))}
+          </div>
+        </div>
+        <div
+          style={{
+            ...styles.column,
+            flex: "0 0 30%",
+          }}
+        >
+          {nutritionalInfo && "allergens" in nutritionalInfo && (
+            <div style={styles.nutritionalInfo}>
+              <h2>Basket Nutritional Information</h2>
+              <ul>
+                <li>Calories: {nutritionalInfo.calories}</li>
+                <li>Protein: {nutritionalInfo.protein}</li>
+                <li>Fat: {nutritionalInfo.fat}</li>
+                <li>Carbohydrates: {nutritionalInfo.carbohydrates}</li>
+              </ul>
+              <h2>Allergens/Dietary Preferences</h2>
+              <ul>
+                {nutritionalInfo.allergens.map((allergen) => (
+                  <li key={allergen}>{allergen}</li>
+                ))}
+              </ul>
+              <h2>Health Score</h2>
+              <p>Score: {nutritionalInfo.healthScore}</p>
             </div>
-          ))}
+          )}
+        </div>
       </div>
     </>
   );
