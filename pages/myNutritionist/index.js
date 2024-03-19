@@ -59,11 +59,11 @@ export default function MyNutritionist() {
     setOpen(false);
   };
 
-  const handleUpvote = async (postId) => {
+  const handleVote = async (postId, vote) => {
     try {
       const { data: post, error } = await supabase
         .from("posts")
-        .select("votes")
+        .select("*")
         .eq("id", postId)
         .single();
 
@@ -71,10 +71,42 @@ export default function MyNutritionist() {
         throw error;
       }
 
-      const updatedVotes = post.votes + 1;
+      let { upvotes, downvotes } = post;
+      upvotes = upvotes || [];
+      downvotes = downvotes || [];
+
+      if (vote === 1) {
+        if (!upvotes.includes(user.sub)) {
+          upvotes.push(user.sub);
+        } else {
+          const index = upvotes.indexOf(user.sub);
+          if (index > -1) {
+            upvotes.splice(index, 1);
+          }
+        }
+        const index = downvotes.indexOf(user.sub);
+        if (index > -1) {
+          downvotes.splice(index, 1);
+        }
+      } else if (vote === -1) {
+        if (!downvotes.includes(user.sub)) {
+          downvotes.push(user.sub);
+        } else {
+          const index = downvotes.indexOf(user.sub);
+          if (index > -1) {
+            downvotes.splice(index, 1);
+          }
+        }
+        const index = upvotes.indexOf(user.sub);
+        if (index > -1) {
+          upvotes.splice(index, 1);
+        }
+      }
+
+      console.log(upvotes, downvotes);
       const { error: updateError } = await supabase
         .from("posts")
-        .update({ votes: updatedVotes })
+        .update({ upvotes, downvotes })
         .eq("id", postId);
 
       if (updateError) {
@@ -82,33 +114,6 @@ export default function MyNutritionist() {
       }
     } catch (error) {
       console.error("Error upvoting post:", error.message);
-    }
-    fetchPosts();
-  };
-
-  const handleDownvote = async (postId) => {
-    try {
-      const { data: post, error } = await supabase
-        .from("posts")
-        .select("votes")
-        .eq("id", postId)
-        .single();
-
-      if (error) {
-        throw error;
-      }
-
-      const updatedVotes = Math.max(0, post.votes - 1);
-      const { error: updateError } = await supabase
-        .from("posts")
-        .update({ votes: updatedVotes })
-        .eq("id", postId);
-
-      if (updateError) {
-        throw updateError;
-      }
-    } catch (error) {
-      console.error("Error downvoting post:", error.message);
     }
     fetchPosts();
   };
@@ -160,14 +165,17 @@ export default function MyNutritionist() {
           <div key={post.id} className={styles.post}>
             <div className={styles.voteContainer}>
               <button
-                onClick={() => handleUpvote(post.id)}
+                onClick={() => handleVote(post.id, 1)}
                 className={styles.voteButton}
               >
                 <FiArrowUp size={42} />
               </button>
-              <span className={styles.voteCount}>{post.votes}</span>
+              <span className={styles.voteCount}>
+                {(post.upvotes ? post.upvotes.length : 0) -
+                  (post.downvotes ? post.downvotes.length : 0)}
+              </span>
               <button
-                onClick={() => handleDownvote(post.id)}
+                onClick={() => handleVote(post.id, -1)}
                 className={styles.voteButton}
               >
                 <FiArrowDown size={42} />
