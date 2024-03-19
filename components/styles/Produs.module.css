@@ -81,7 +81,7 @@
 }
 
 .ingredient:nth-child(2n) {
-  background-color: #c3e8a6;
+  background-color: #15733a;
   color: black;
 }
 
@@ -115,7 +115,7 @@
 
   border-radius: 10px;
 
-  background-color: #c3e8a6;
+  background-color: #15733a;
   color: black;
 }
 

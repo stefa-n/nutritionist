@@ -18,6 +18,9 @@ const Submission = () => {
   const [uid, setuid] = useState("");
 
   const importFromOpenFoodFacts = () => {
+    if (barcode === "") {
+      return;
+    }
     fetch("https://world.openfoodfacts.org/api/v0/product/" + barcode + ".json")
       .then((response) => response.json())
       .then((data) => {
@@ -227,9 +230,9 @@ const Submission = () => {
               Cancel
             </button>
           </div>
-          <button className={styles.off} onClick={importFromOpenFoodFacts}>
+          <div className={styles.off} onClick={importFromOpenFoodFacts}>
             Import from OpenFoodFacts
-          </button>
+          </div>
         </form>
       )}
     </div>

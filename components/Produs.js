@@ -204,6 +204,15 @@ export default function Produs({ produs, onVote }) {
       "none";
   };
 
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === "Escape") {
+        inapoi();
+      }
+    };
+    window.addEventListener("keydown", handleEscape);
+  }, []);
+
   return (
     <div>
       <div className={styles.card}>
@@ -249,7 +258,7 @@ export default function Produs({ produs, onVote }) {
               <Tooltip
                 type="cals"
                 text={produs.kcal + "kcal/100g"}
-                color="#C3E8A6"
+                color="#1fa152"
               />
               <Tooltip
                 type="nutri"
@@ -295,9 +304,7 @@ export default function Produs({ produs, onVote }) {
               <span
                 key={allergen}
                 className={`${styles.allergen} ${
-                  storedAllergens.includes(allergen)
-                    ? styles.inLocalStorage
-                    : ""
+                  allergen.includes(allergen) ? styles.inLocalStorage : ""
                 }`}
               >
                 {allergen}
@@ -310,7 +317,7 @@ export default function Produs({ produs, onVote }) {
               Dietary preferences set in your profile page are{" "}
               <span
                 style={{
-                  backgroundColor: "#c3e8a6",
+                  backgroundColor: "#1fa152",
                   paddingLeft: "5px",
                   paddingRight: "5px",
                   borderRadius: "5px",

@@ -102,10 +102,10 @@ export default function Card({
           <p className={styles.subtitle} style={{}}>
             {subtitle}
           </p>
-          <div>
+          <div style={{ cursor: "default" }}>
             {!subtitle ? (
               <>
-                <Tooltip type="cals" text={calories + "kcal"} color="#C3E8A6" />
+                <Tooltip type="cals" text={calories + "kcal"} color="#1fa152" />
                 <Tooltip
                   type="nutri"
                   text={"Health score:" + healthScore.toFixed(2)}

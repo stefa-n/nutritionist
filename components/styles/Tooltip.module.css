@@ -19,6 +19,8 @@
 .text {
     color: black;
     font-size: 0.75rem;
+    cursor: default;
+    user-select: none;
 }
 
 @media (max-width : 1000px) {

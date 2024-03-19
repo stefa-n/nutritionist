@@ -11,7 +11,7 @@
 }
 
 .ingredient:nth-child(3n) {
-    background-color: #C3E8A6;
+    background-color: #1fa152;
 }
   
 .ingredient:nth-child(3n + 1) {
