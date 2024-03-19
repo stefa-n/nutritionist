@@ -130,8 +130,8 @@ export default function Basket() {
               </ul>
               <h2>Allergens/Dietary Preferences</h2>
               <ul>
-                {nutritionalInfo.allergens.map((allergen) => (
-                  <li key={allergen}>{allergen}</li>
+                {nutritionalInfo.allergens.map((allergen, index) => (
+                  <li key={index}>{allergen}</li>
                 ))}
               </ul>
               <h2>Health Score</h2>
