@@ -17,6 +17,24 @@ const Submission = () => {
   const [weight, setWeight] = useState("");
   const [uid, setuid] = useState("");
 
+  const importFromOpenFoodFacts = () => {
+    // get info from api using barcode
+    fetch("https://world.openfoodfacts.org/api/v0/product/" + barcode + ".json")
+      .then((response) => response.json())
+      .then((data) => {
+        setBrand(data.product.brands);
+        setProduct_name(data.product.product_name);
+        setIngredients(data.product.ingredients_text_en);
+        setKcal(data.product.nutriments["energy-kcal_100g"]);
+        setWeight(parseInt(data.product.quantity_imported, 10));
+        let allergens = data.product.allergens_tags.map((allergen) =>
+          allergen.replace("en:", "")
+        );
+        setAllergens(allergens);
+        console.log(data);
+      });
+  };
+
   const handleButtonClick = () => {
     let user = localStorage.getItem("access_token");
     if (user === null) {
@@ -196,7 +214,7 @@ const Submission = () => {
             className={styles.input}
             type="number"
             name="weight"
-            placeholder="Weight (g)"
+            placeholder="Quantity (g / ml)"
             value={weight}
             onChange={handleInputChange}
             required
@@ -209,6 +227,9 @@ const Submission = () => {
               Cancel
             </button>
           </div>
+          <button className={styles.off} onClick={importFromOpenFoodFacts}>
+            Import from OpenFoodFacts
+          </button>
         </form>
       )}
     </div>

@@ -164,7 +164,7 @@ export default function Produs({ produs, onVote }) {
 
           if (string != "")
             setProductDietaryPreferences(string.slice(2).split(", "));
-          else setProductDietaryPreferences(["None"]);
+          else setProductDietaryPreferences(["None met"]);
 
           console.log(string.slice(2).split(", "));
         }
@@ -310,13 +310,14 @@ export default function Produs({ produs, onVote }) {
               Dietary preferences set in your profile page are{" "}
               <span
                 style={{
-                  backgroundColor: "#D0576D",
+                  backgroundColor: "#c3e8a6",
                   paddingLeft: "5px",
                   paddingRight: "5px",
                   borderRadius: "5px",
+                  color: "black",
                 }}
               >
-                colored in red
+                colored in green
               </span>
             </span>{" "}
           </p>
@@ -327,9 +328,10 @@ export default function Produs({ produs, onVote }) {
                 className={`${styles.allergen} 
                   ${
                     dietaryPreferences[`${preference}`] === true
-                      ? styles.inLocalStorage
-                      : ""
+                      ? ""
+                      : styles.inLocalStorage
                   }
+                  ${preference === "None met" ? styles.inLocalStorage : ""}
                 `}
               >
                 {preference}
