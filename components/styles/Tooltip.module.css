@@ -1,31 +1,33 @@
 .wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    padding-left: 1vw;
-    padding-right: 1vw;
-    height: 4.5vh;
+  padding-left: 1vw;
+  padding-right: 1vw;
+  height: 4.5vh;
 
-    min-width: 80px;
+  min-width: 80px;
 
-    border-radius: 10px;
+  border-radius: 10px;
+  width: 200px;
 }
 
 .icon {
-    margin-right: 5px;
+  margin-right: 5px;
 }
 
 .text {
-    color: black;
-    font-size: 0.75rem;
-    cursor: default;
-    user-select: none;
+  color: black;
+  font-size: 0.75rem;
+  cursor: default;
+  user-select: none;
 }
 
-@media (max-width : 1000px) {
-    .wrapper {
-        width: 40vw;
-        min-height: 20px;
-    }
+@media (max-width: 1000px) {
+  .wrapper {
+    width: 40vw;
+    min-height: 20px;
   }
+}

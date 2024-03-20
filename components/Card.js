@@ -92,7 +92,7 @@ export default function Card({
     onRemove();
   };
   return (
-    <Card2 className={styles.wrapper}>
+    <Card2 className={styles.wrapper} style={{ cursor: "pointer" }}>
       <CardContent onClick={onClick}>
         <CardMedia component="img" image={image} height={300} />
         <div className={styles.textArea}>
@@ -105,13 +105,19 @@ export default function Card({
           <div style={{ cursor: "default" }}>
             {!subtitle ? (
               <>
-                <Tooltip type="cals" text={calories + "kcal"} color="#1fa152" />
+                <Tooltip
+                  type="cals"
+                  text={calories + "kcal"}
+                  color="#1fa152"
+                  style={{ flex: "1" }}
+                />
                 <Tooltip
                   type="nutri"
                   text={
                     "Health score:" + healthScore ? healthScore.toFixed(2) : 0
                   }
                   color="#D0576D"
+                  style={{ flex: "1" }}
                 />
               </>
             ) : (
