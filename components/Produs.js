@@ -242,6 +242,9 @@ export default function Produs({ produs, onVote }) {
     window.addEventListener("keydown", handleEscape);
   }, []);
 
+  if (!novascore) setNovascore("N/A");
+  if (!nutriscore) setNutriscore("N/A");
+
   return (
     <div>
       <div className={styles.card}>
