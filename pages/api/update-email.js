@@ -1,4 +1,4 @@
-import { admin_supabase } from "./supabase";
+import { admin_supabase } from "./admin/supabase";
 import { jwtDecode } from "jwt-decode";
 
 export default async function handler(req, res) {
@@ -7,10 +7,8 @@ export default async function handler(req, res) {
   try {
     const uid = jwtDecode(accessToken).sub;
 
-    const { data: user, error } = await admin_supabase.auth.admin.updateUserById(
-      uid,
-      { email }
-    );
+    const { data: user, error } =
+      await admin_supabase.auth.admin.updateUserById(uid, { email });
 
     if (error) {
       res.status(500).json({ error: "Something went wrong." });

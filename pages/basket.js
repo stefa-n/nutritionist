@@ -59,7 +59,7 @@ export default function Basket() {
           auxNutritionalInfo.healthScore += produs.health_score;
         });
         if (products) {
-          // auxNutritionalInfo.healthScore /= products.length;
+          auxNutritionalInfo.healthScore /= products.length;
         }
         setNutritionalInfo(auxNutritionalInfo);
       } catch (error) {

@@ -15,7 +15,7 @@ const Submission = () => {
   const [kcal, setKcal] = useState("");
   const [weight, setWeight] = useState("");
   const [uid, setuid] = useState("");
-
+  const [supabase, setSupabase] = useState();
   const importFromOpenFoodFacts = () => {
     if (barcode === "") {
       return;
@@ -88,11 +88,7 @@ const Submission = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const [supabase, setSupabase] = useState();
-    setSupabase(createClient(
-      "https://devjuheafwjammjnxthd.supabase.co",
-      uid
-    ));
+    setSupabase(createClient("https://devjuheafwjammjnxthd.supabase.co", uid));
 
     let approved = false;
 
