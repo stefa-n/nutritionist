@@ -257,7 +257,7 @@ export default function Produs({ produs, onVote, onNutriFetch = () => {} }) {
   const ingredients = produs.ingredients.split(", ");
   var allergens = [];
 
-  if (produs.allergens != null) allergens = produs.allergens.split(", ");
+  if (produs.allergens != null) allergens = JSON.parse(produs.allergens);
   else allergens[0] = "Nu conține alergeni";
 
   const [storedAllergens, setStoredAllergens] = useState([]);
