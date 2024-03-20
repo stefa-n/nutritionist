@@ -68,6 +68,7 @@ export default function Basket() {
       }
 
       setProducts(produse);
+      console.log(produse);
       let auxNutritionalInfo = {
         calories: 0,
         protein: 0,
@@ -79,7 +80,7 @@ export default function Basket() {
       produse.forEach((produs) => {
         auxNutritionalInfo.calories += produs.kcal;
         auxNutritionalInfo.allergens = auxNutritionalInfo.allergens.concat(
-          produs.allergens.split(",").map((item) => item.trim())
+          JSON.parse(produs.allergens)
         );
         auxNutritionalInfo.healthScore += produs.health_score / produse.length;
       });
@@ -210,8 +211,8 @@ export default function Basket() {
               </TableContainer>
               <h2>Allergens/Dietary Preferences</h2>
               <ul>
-                {nutritionalInfo.allergens.map((allergen, index) => (
-                  <li key={index}>{allergen}</li>
+                {nutritionalInfo.allergens.map((allergen) => (
+                  <li key={allergen}>{allergen}</li>
                 ))}
               </ul>
               <h2>Health Score</h2>
