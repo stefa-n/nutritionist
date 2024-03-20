@@ -156,12 +156,17 @@ const EditSubmission = ({ product, supabase }) => {
           <button className={styles.cancel} onClick={() => handleDelete()}>
             Delete
           </button>
-          <button
+          <div
             className={styles.cancel}
-            onClick={() => window.location.reload(false)}
+            style={{ width: "90%", textAlign: "center" }}
+            onClick={() =>
+              (document.getElementById(
+                "submission." + product.id
+              ).style.display = "none")
+            }
           >
             Cancel
-          </button>
+          </div>
         </div>
       </form>
     </div>
