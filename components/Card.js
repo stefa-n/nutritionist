@@ -43,7 +43,6 @@ export default function Card({
     fetch(`https://world.openfoodfacts.org/api/v0/product/${barcode}.json`)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         if (data.product != null) {
           if (data.product.nova_group != null)
             setNovascore(nova_dict[data.product.nova_group]);
@@ -110,7 +109,9 @@ export default function Card({
                 <Tooltip type="cals" text={calories + "kcal"} color="#1fa152" />
                 <Tooltip
                   type="nutri"
-                  text={"Health score:" + healthScore.toFixed(2)}
+                  text={
+                    "Health score:" + healthScore ? healthScore.toFixed(2) : 0
+                  }
                   color="#D0576D"
                 />
               </>
