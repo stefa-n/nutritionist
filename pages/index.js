@@ -24,7 +24,7 @@ export default function Home() {
       .from("products")
       .select("*")
       .eq("approved", true)
-      .ilike("product_name", `%${query}%`)
+      .or(`brand.ilike."%${query}%", product_name.ilike."%${query}%"`)
       .order("health_score", { ascending: false });
     const produse = data;
 

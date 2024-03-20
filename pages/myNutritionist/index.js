@@ -62,8 +62,9 @@ export default function MyNutritionist() {
       const { data, error } = await supabase
         .from("posts")
         .select("*")
-        .ilike("title", `%${query}%`)
-        // .ilike("description", `%${query}%`) // TODO: temporary disable description search otherwise search is broken
+        .or(
+          `title.ilike."%${query}%", description.ilike."%${query}%", tag.ilike."%${query}%"`
+        )
         .order("created_at", { ascending: false });
       setPosts(data);
     } catch (error) {
