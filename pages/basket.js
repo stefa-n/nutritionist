@@ -58,7 +58,9 @@ export default function Basket() {
           );
           auxNutritionalInfo.healthScore += produs.health_score;
         });
-        auxNutritionalInfo.healthScore /= products.length;
+        if (products) {
+          // auxNutritionalInfo.healthScore /= products.length;
+        }
         setNutritionalInfo(auxNutritionalInfo);
       } catch (error) {
         console.error("Error fetching products:", error.message);
@@ -72,9 +74,9 @@ export default function Basket() {
   return (
     <>
       <div className={styles.container}>
-        <div style={{ ...styles.column, flex: "0 0 70%" }}>
+        <div className={styles.column} style={{ flex: "0 0 70%" }}>
           <h1>Your basket</h1>
-          <div className={`${styles.grid}`}>
+          <div className={styles.grid}>
             {products &&
               products.map((product) => (
                 <div key={product.id}>
@@ -113,12 +115,7 @@ export default function Basket() {
               ))}
           </div>
         </div>
-        <div
-          style={{
-            ...styles.column,
-            flex: "0 0 30%",
-          }}
-        >
+        <div className={styles.column} style={{ flex: "0 0 30%" }}>
           {nutritionalInfo && "allergens" in nutritionalInfo && (
             <div style={styles.nutritionalInfo}>
               <h2>Basket Nutritional Information</h2>
