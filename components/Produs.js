@@ -256,10 +256,15 @@ export default function Produs({ produs, onVote, onNutriFetch = () => {} }) {
 
   const ingredients = produs.ingredients.split(", ");
   var allergens = [];
-
-  if (produs.allergens != null) allergens = JSON.parse(produs.allergens);
-  else allergens[0] = "Nu conține alergeni";
-
+  try {
+    allergens = JSON.parse(produs.allergens);
+    if (allergens.length == 0) {
+      allergens = "Nu conține alergeni";
+    }
+  } catch (err) {
+    allergens = "Nu conține alergeni";
+  }
+  console.log(allergens);
   const [storedAllergens, setStoredAllergens] = useState([]);
 
   useEffect(() => {
@@ -292,8 +297,6 @@ export default function Produs({ produs, onVote, onNutriFetch = () => {} }) {
 
   if (!novascore) setNovascore("N/A");
   if (!nutriscore) setNutriscore("N/A");
-
-  console.log(comments);
 
   return (
     <div>
@@ -456,16 +459,20 @@ export default function Produs({ produs, onVote, onNutriFetch = () => {} }) {
             </span>{" "}
           </p>
           <div className={styles.container}>
-            {allergens.map((allergen) => (
-              <span
-                key={allergen}
-                className={`${styles.allergen} ${
-                  allergen.includes(allergen) ? styles.inLocalStorage : ""
-                }`}
-              >
-                {allergen}
-              </span>
-            ))}
+            {Array.isArray(allergens) ? (
+              allergens.map((allergen) => (
+                <span
+                  key={allergen}
+                  className={`${styles.allergen} ${
+                    allergen.includes(allergen) ? styles.inLocalStorage : ""
+                  }`}
+                >
+                  {allergen}
+                </span>
+              ))
+            ) : (
+              <div>No allergens</div>
+            )}
           </div>
           <p className={styles.infoTitle}>
             Dietary preferences:{" "}
