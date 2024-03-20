@@ -5,7 +5,7 @@ import { signOut } from "@/components/Auth/Auth";
 
 import styles from "./styles/Topbar.module.css";
 
-export default function Topbar({ value, profile, onSearch }) {
+export default function Topbar({ value, profile, onSearch, search = true }) {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [Value, setValue] = useState(value);
@@ -37,41 +37,34 @@ export default function Topbar({ value, profile, onSearch }) {
         placeholder="Search..."
         className={styles.searchBar}
         id="searchBar"
+        style={{
+          visibility: search ? "visible" : "hidden",
+        }}
       />
-      <div>
+      <div className={styles.userActions}>
+        <button onClick={() => router.push("/")} className={styles.accountBtn}>
+          Home
+        </button>
         <button
           onClick={() => router.push("/myNutritionist")}
           className={styles.forumBtn}
         >
           My Nutritionist
         </button>
-      </div>
-      <div>
         <button
           onClick={() => router.push("/basket")}
           className={styles.forumBtn}
         >
           Basket
         </button>
-      </div>
-      <div className={styles.userActions}>
         {isLoggedIn ? (
           <>
-            {profile ? (
-              <button
-                onClick={() => router.push("/")}
-                className={styles.accountBtn}
-              >
-                Home
-              </button>
-            ) : (
-              <button
-                onClick={() => router.push("/profile")}
-                className={styles.accountBtn}
-              >
-                Account
-              </button>
-            )}
+            <button
+              onClick={() => router.push("/profile")}
+              className={styles.accountBtn}
+            >
+              Account
+            </button>
             <button onClick={signOut} className={styles.signoutBtn}>
               Sign Out
             </button>

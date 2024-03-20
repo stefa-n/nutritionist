@@ -29,7 +29,7 @@ export default function Profile() {
 
   return (
     <>
-      <Topbar profile={true} />
+      <Topbar profile={true} search={false} />
       <div className={styles.main}>
         <div className={styles.profile}>
           <img

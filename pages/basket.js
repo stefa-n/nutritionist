@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/pages/index.js";
 import Card from "@/components/Card";
 import Produs from "@/components/Produs";
+import Topbar from "@/components/Topbar";
 
 import styles from "@/styles/Basket.module.css";
 
@@ -73,6 +74,7 @@ export default function Basket() {
   }, [basket]);
   return (
     <>
+      <Topbar search={false} />
       <div className={styles.container}>
         <div className={styles.column} style={{ flex: "0 0 70%" }}>
           <h1>Your basket</h1>

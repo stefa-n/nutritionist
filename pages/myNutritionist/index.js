@@ -7,6 +7,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import { jwtDecode } from "jwt-decode";
 import { formatDistanceToNow } from "date-fns";
+import Topbar from "@/components/Topbar";
 
 import ReactMarkdown from "react-markdown";
 
@@ -161,6 +162,7 @@ export default function MyNutritionist() {
 
   return (
     <>
+      <Topbar search={false} />
       <div className={styles.postList}>
         <h1>Welcome to the MyNutritionist forum</h1>
         <div className={styles.barContainer}>

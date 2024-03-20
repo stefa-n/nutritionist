@@ -5,6 +5,7 @@ import ReactMarkdown from "react-markdown";
 import { formatDistanceToNow } from "date-fns";
 import { FiArrowUp, FiArrowDown } from "react-icons/fi";
 import { jwtDecode } from "jwt-decode";
+import Topbar from "@/components/Topbar";
 
 import styles from "@/styles/myNutritionist.module.css";
 
@@ -20,7 +21,7 @@ const PostDetailPage = () => {
   const [newComment, setNewComment] = useState("");
 
   useEffect(() => {
-    token = localStorage.getItem("access_token")
+    token = localStorage.getItem("access_token");
     if (!token) {
       router.push("/login");
       return;
@@ -30,11 +31,11 @@ const PostDetailPage = () => {
       "https://devjuheafwjammjnxthd.supabase.co",
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRldmp1aGVhZndqYW1tam54dGhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDgyODE4OTIsImV4cCI6MjAyMzg1Nzg5Mn0.nb5Hx-GEORyNSyoBcVfFC3ktfS5x7vCqBtsD3kJR25M",
       {
-        'global': {
-          'headers': {
-            'Authorization': `Bearer ${token}`
-          }
-        }
+        global: {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       }
     );
 
@@ -160,76 +161,79 @@ const PostDetailPage = () => {
   }
 
   return (
-    <div className={styles.postList}>
-      <div key={post.id} className={styles.post}>
-        <div className={styles.voteContainer}>
-          <button
-            onClick={() => handleVote(post.id, 1)}
-            className={styles.voteButton}
-          >
-            <FiArrowUp size={42} />
-          </button>
-          <span className={styles.voteCount}>
-            {(post.upvotes ? post.upvotes.length : 0) -
-              (post.downvotes ? post.downvotes.length : 0)}
-          </span>
-          <button
-            onClick={() => handleVote(post.id, -1)}
-            className={styles.voteButton}
-          >
-            <FiArrowDown size={42} />
-          </button>
-        </div>
-        <div
-          className={styles.postContent}
-          onClick={() => router.push(`/myNutritionist/${post.id}`)}
-        >
-          <div className={styles.commentDetails}>
-            <span className={styles.commentUser}>{post.username}</span>
-            <span className={styles.commentDate}>
-              {formatDistanceToNow(new Date(post.created_at), {
-                addSuffix: true,
-              })}
+    <>
+      <Topbar search={false} />
+      <div className={styles.postList}>
+        <div key={post.id} className={styles.post}>
+          <div className={styles.voteContainer}>
+            <button
+              onClick={() => handleVote(post.id, 1)}
+              className={styles.voteButton}
+            >
+              <FiArrowUp size={42} />
+            </button>
+            <span className={styles.voteCount}>
+              {(post.upvotes ? post.upvotes.length : 0) -
+                (post.downvotes ? post.downvotes.length : 0)}
             </span>
+            <button
+              onClick={() => handleVote(post.id, -1)}
+              className={styles.voteButton}
+            >
+              <FiArrowDown size={42} />
+            </button>
           </div>
-          <h2>{post.title}</h2>
-          <p className={styles.tag}>{post.tag}</p>
-          {
-            // eslint-disable-next-line
-          }
-          <ReactMarkdown
-            className={styles.markdownPreview}
-            children={post.description}
+          <div
+            className={styles.postContent}
+            onClick={() => router.push(`/myNutritionist/${post.id}`)}
+          >
+            <div className={styles.commentDetails}>
+              <span className={styles.commentUser}>{post.username}</span>
+              <span className={styles.commentDate}>
+                {formatDistanceToNow(new Date(post.created_at), {
+                  addSuffix: true,
+                })}
+              </span>
+            </div>
+            <h2>{post.title}</h2>
+            <p className={styles.tag}>{post.tag}</p>
+            {
+              // eslint-disable-next-line
+            }
+            <ReactMarkdown
+              className={styles.markdownPreview}
+              children={post.description}
+            />
+          </div>
+        </div>
+        <div className={styles.commentBox}>
+          <textarea
+            className={styles.commentInput}
+            id="newComment"
+            placeholder="Type your comment here..."
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            required
           />
+          <button className={styles.uploadButton} onClick={handleUpload}>
+            Upload
+          </button>
         </div>
-      </div>
-      <div className={styles.commentBox}>
-        <textarea
-          className={styles.commentInput}
-          id="newComment"
-          placeholder="Type your comment here..."
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-          required
-        />
-        <button className={styles.uploadButton} onClick={handleUpload}>
-          Upload
-        </button>
-      </div>
-      {comments.map((comment) => (
-        <div className={styles.comment} key={comment.id}>
-          <div className={styles.commentDetails}>
-            <span className={styles.commentUser}>{comment.username}</span>
-            <span className={styles.commentDate}>
-              {formatDistanceToNow(new Date(comment.created_at), {
-                addSuffix: true,
-              })}
-            </span>
+        {comments.map((comment) => (
+          <div className={styles.comment} key={comment.id}>
+            <div className={styles.commentDetails}>
+              <span className={styles.commentUser}>{comment.username}</span>
+              <span className={styles.commentDate}>
+                {formatDistanceToNow(new Date(comment.created_at), {
+                  addSuffix: true,
+                })}
+              </span>
+            </div>
+            <div className={styles.commentText}>{comment.text}</div>
           </div>
-          <div className={styles.commentText}>{comment.text}</div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+    </>
   );
 };
 
