@@ -12,12 +12,12 @@ export default function Review() {
   const [off, setOff] = useState([]);
   const router = useRouter();
 
-  const { id } = router.query;
-  if (!id) {
-    router.push("/admin");
-  }
-
   useEffect(() => {
+    const { id } = router.query;
+    if (!id) {
+      router.push("/admin");
+    }
+
     const fetchProduct = async () => {
       const accessToken = localStorage.getItem("access_token");
       let response = await fetch(`/api/admin/getsubmission`, {
@@ -36,6 +36,11 @@ export default function Review() {
   }, []);
 
   useEffect(() => {
+    const { id } = router.query;
+    if (!id) {
+      router.push("/admin");
+    }
+
     const fetchOpenFoodFacts = async () => {
       let { data: productData, error } = await admin_supabase
         .from("products")
