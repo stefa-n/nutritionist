@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import styles from "./styles/Submission.module.css";
 import { jwtDecode } from "jwt-decode";
 import { checkValid } from "@/components/Auth/Auth";
-
+import { createClient } from "@supabase/supabase-js";
+import { admin_supabase } from "@/pages/api/admin/supabase";
+let supabase;
 const Submission = () => {
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -15,7 +17,7 @@ const Submission = () => {
   const [kcal, setKcal] = useState("");
   const [weight, setWeight] = useState("");
   const [uid, setuid] = useState("");
-  const [supabase, setSupabase] = useState();
+  // const [supabase, setSupabase] = useState();
   const importFromOpenFoodFacts = () => {
     if (barcode === "") {
       return;
@@ -88,8 +90,18 @@ const Submission = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    setSupabase(createClient("https://devjuheafwjammjnxthd.supabase.co", uid));
-
+    const accessToken = localStorage.getItem("access_token");
+    supabase = createClient(
+      "https://devjuheafwjammjnxthd.supabase.co",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRldmp1aGVhZndqYW1tam54dGhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDgyODE4OTIsImV4cCI6MjAyMzg1Nzg5Mn0.nb5Hx-GEORyNSyoBcVfFC3ktfS5x7vCqBtsD3kJR25M",
+      {
+        global: {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+      }
+    );
     let approved = false;
 
     let { data: productData, error: productError } = await supabase
@@ -120,6 +132,8 @@ const Submission = () => {
           approved,
           owned_by_uid: uid,
           health_score: 0,
+          upvotes: [],
+          downvotes: [],
         },
       ])
       .select();
@@ -129,7 +143,7 @@ const Submission = () => {
       return;
     }
 
-    let { error: imageError } = await supabase.storage
+    let { error: imageError } = await admin_supabase.storage
       .from("products")
       .upload(data[0].id + "." + file.type.replace(/(.*)\//g, ""), file, {
         cacheControl: "3600",
