@@ -4,7 +4,13 @@ import { formatDistanceToNow } from "date-fns";
 import { jwtDecode } from "jwt-decode";
 import { FiArrowUp, FiArrowDown } from "react-icons/fi";
 import { createClient } from "@supabase/supabase-js";
-
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 import styles from "@/components/styles/Produs.module.css";
 
 import Tooltip from "./produs/Tooltip";
@@ -29,7 +35,7 @@ const nova_dict = {
 
 let supabase;
 
-export default function Produs({ produs, onVote }) {
+export default function Produs({ produs, onVote, onNutriFetch = () => {} }) {
   const [nutriscore, setNutriscore] = useState("");
   const [novascore, setNovascore] = useState("");
   const [user, setUser] = useState({});
@@ -39,6 +45,7 @@ export default function Produs({ produs, onVote }) {
     []
   );
   const [newComment, setNewComment] = useState("");
+  const [nutriments, setNutriments] = useState({});
   const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -100,8 +107,6 @@ export default function Produs({ produs, onVote }) {
       if (error) {
         throw error;
       }
-
-      console.log("Post created successfully:", data);
     } catch (error) {
       console.error("Error creating post:", error.message);
     }
@@ -184,6 +189,39 @@ export default function Produs({ produs, onVote }) {
       .then((response) => response.json())
       .then((data) => {
         if (data.product != null) {
+          setNutriments({
+            carbohydrates: data.product.nutriments.carbohydrates,
+            carbohydrates_unit: data.product.nutriments.carbohydrates_unit,
+            fat: data.product.nutriments.fat,
+            fat_unit: data.product.nutriments.fat_unit,
+            proteins: data.product.nutriments.proteins,
+            proteins_unit: data.product.nutriments.proteins_unit,
+            fiber: data.product.nutriments.fiber,
+            fiber_unit: data.product.nutriments.fiber_unit,
+            salt: data.product.nutriments.salt,
+            salt_unit: data.product.nutriments.salt_unit,
+            sodium: data.product.nutriments.sodium,
+            sodium_unit: data.product.nutriments.sodium_unit,
+            sugars: data.product.nutriments.sugars,
+            sugars_unit: data.product.nutriments.sugars_unit,
+          });
+          onNutriFetch({
+            id: produs.id,
+            carbohydrates: data.product.nutriments.carbohydrates,
+            carbohydrates_unit: data.product.nutriments.carbohydrates_unit,
+            fat: data.product.nutriments.fat,
+            fat_unit: data.product.nutriments.fat_unit,
+            proteins: data.product.nutriments.proteins,
+            proteins_unit: data.product.nutriments.proteins_unit,
+            fiber: data.product.nutriments.fiber,
+            fiber_unit: data.product.nutriments.fiber_unit,
+            salt: data.product.nutriments.salt,
+            salt_unit: data.product.nutriments.salt_unit,
+            sodium: data.product.nutriments.sodium,
+            sodium_unit: data.product.nutriments.sodium_unit,
+            sugars: data.product.nutriments.sugars,
+            sugars_unit: data.product.nutriments.sugars_unit,
+          });
           setNutriscore(data.product.nutriscore_tags[0].toUpperCase());
           setNovascore(data.product.nova_group);
 
@@ -207,8 +245,6 @@ export default function Produs({ produs, onVote }) {
           if (string != "")
             setProductDietaryPreferences(string.slice(2).split(", "));
           else setProductDietaryPreferences(["None met"]);
-
-          console.log(string.slice(2).split(", "));
         }
       });
     const token = localStorage.getItem("access_token");
@@ -322,6 +358,75 @@ export default function Produs({ produs, onVote }) {
         </div>
         <div className={styles.info}>
           <p className={styles.infoTitle}>Weight: {produs.weight}g</p>
+        </div>
+        <div className={styles.info}>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Nutrition facts</TableCell>
+                  <TableCell>As sold for 100 g / 100 ml</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRow
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    Fat
+                  </TableCell>
+                  <TableCell>
+                    {nutriments.fat}
+                    {nutriments.fat_unit}
+                  </TableCell>
+                </TableRow>
+                <TableRow
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    Carbohydrates
+                  </TableCell>
+                  <TableCell>
+                    {nutriments.carbohydrates}
+                    {nutriments.carbohydrates_unit}
+                  </TableCell>
+                </TableRow>
+                <TableRow
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    Fiber
+                  </TableCell>
+                  <TableCell>
+                    {nutriments.fiber}
+                    {nutriments.fiber_unit}
+                  </TableCell>
+                </TableRow>
+                <TableRow
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    Proteins
+                  </TableCell>
+                  <TableCell>
+                    {nutriments.proteins}
+                    {nutriments.proteins_unit}
+                  </TableCell>
+                </TableRow>
+                <TableRow
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    Salt
+                  </TableCell>
+                  <TableCell>
+                    {nutriments.salt}
+                    {nutriments.salt_unit}
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
         </div>
         <div className={styles.info}>
           <p className={styles.infoTitle}>Ingredients:</p>
