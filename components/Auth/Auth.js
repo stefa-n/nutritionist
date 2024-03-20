@@ -2,6 +2,10 @@ import Router from "next/router";
 import { supabase } from "@/pages/index";
 
 export async function checkValid(token, redirect = true) {
+  if (!token) {
+    if (redirect) Router.push("login");
+    return false;
+  }
   const response = await fetch("/api/auth/checkvalid", {
     method: "POST",
     headers: {
@@ -11,6 +15,7 @@ export async function checkValid(token, redirect = true) {
   });
   if (!response.ok) {
     signOut(redirect);
+    return true;
   }
 }
 

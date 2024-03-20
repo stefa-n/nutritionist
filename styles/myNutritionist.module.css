@@ -5,15 +5,23 @@
 }
 
 .post {
-  border: 1px solid #ffffff;
+  border: 1px solid #555;
   padding: 10px;
   margin-bottom: 10px;
   display: flex;
   width: 100%;
   align-items: center;
+  border-radius: 1rem;
+  transition: 0.15s;
 }
 .post:hover {
   cursor: pointer;
+  border-radius: 0.5rem;
+  background-color: #333;
+}
+
+.post:hover > .postContent > h2 {
+  color: salmon;
 }
 
 .postList h1 {
@@ -41,10 +49,12 @@
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  background-color: #333;
   color: #fff;
-  padding: 20px;
+  padding-left: 1px;
+  padding-right: 1px;
+  padding-bottom: 20px;
 }
+
 .searchBar {
   flex-grow: 1;
   padding: 12px;

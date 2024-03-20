@@ -19,6 +19,12 @@ import { checkValid } from "@/components/Auth/Auth";
 
 let supabase;
 
+const MarkdownComponents = {
+  img: () => {
+    return <span>(image)</span>;
+  },
+};
+
 const truncateDescription = (description, maxWords) => {
   const words = description.split(" ");
   if (words.length > maxWords) {
@@ -65,6 +71,7 @@ export default function MyNutritionist() {
         .or(
           `title.ilike."%${query}%", description.ilike."%${query}%", tag.ilike."%${query}%"`
         )
+        .order("pinned", { ascending: false })
         .order("created_at", { ascending: false });
       setPosts(data);
     } catch (error) {
@@ -215,12 +222,22 @@ export default function MyNutritionist() {
               onClick={() => router.push(`/myNutritionist/${post.id}`)}
             >
               <div className={styles.commentDetails}>
-                <span className={styles.commentUser}>{post.username}</span>
+                <span className={styles.commentUser}>
+                  {post.username.substring(0, post.username.lastIndexOf("@"))}
+                </span>
                 <span className={styles.commentDate}>
                   {formatDistanceToNow(new Date(post.created_at), {
                     addSuffix: true,
                   })}
                 </span>
+                {post.pinned && (
+                  <span
+                    className={styles.commentDate}
+                    style={{ color: "salmon" }}
+                  >
+                    Pinned
+                  </span>
+                )}
               </div>
               <h2>{post.title}</h2>
               <p className={styles.tag}>{post.tag}</p>
@@ -230,6 +247,7 @@ export default function MyNutritionist() {
               <ReactMarkdown
                 className={styles.markdownPreview}
                 children={truncateDescription(post.description, 50)}
+                components={MarkdownComponents}
               />
             </div>
           </div>
