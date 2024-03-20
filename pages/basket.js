@@ -18,56 +18,58 @@ export default function Basket() {
     }
   };
 
+  const fetchProductsByIds = async () => {
+    try {
+      const { data: produse, error } = await supabase
+        .from("products")
+        .select("*")
+        .in("id", basket);
+
+      if (error) {
+        throw error;
+      }
+
+      for (let i = 0; i < produse.length; i++) {
+        const { data } = supabase.storage
+          .from("products")
+          .getPublicUrl(`${produse[i].id}.${produse[i].image_format}`);
+
+        produse[i].image = `${data.publicUrl}`;
+      }
+
+      setProducts(produse);
+      let auxNutritionalInfo = {
+        calories: 0,
+        protein: 0,
+        fat: 0,
+        carbohydrates: 0,
+        allergens: [],
+        healthScore: 0,
+      };
+      produse.forEach((produs) => {
+        console.log(produs);
+        auxNutritionalInfo.calories += produs.kcal;
+        auxNutritionalInfo.allergens = auxNutritionalInfo.allergens.concat(
+          produs.allergens.split(",").map((item) => item.trim())
+        );
+        auxNutritionalInfo.healthScore += produs.health_score / produse.length;
+      });
+      if (produse) {
+        auxNutritionalInfo.allergens = [
+          ...new Set(auxNutritionalInfo.allergens),
+        ];
+      }
+      setNutritionalInfo(auxNutritionalInfo);
+    } catch (error) {
+      console.error("Error fetching products:", error.message);
+    }
+  };
+
   useEffect(() => {
     fetchBasketFromLocalStorage();
   }, []);
 
   useEffect(() => {
-    const fetchProductsByIds = async () => {
-      try {
-        const { data: produse, error } = await supabase
-          .from("products")
-          .select("*")
-          .in("id", basket);
-
-        if (error) {
-          throw error;
-        }
-
-        for (let i = 0; i < produse.length; i++) {
-          const { data } = supabase.storage
-            .from("products")
-            .getPublicUrl(`${produse[i].id}.${produse[i].image_format}`);
-
-          produse[i].image = `${data.publicUrl}`;
-        }
-
-        setProducts(produse);
-        let auxNutritionalInfo = {
-          calories: 0,
-          protein: 0,
-          fat: 0,
-          carbohydrates: 0,
-          allergens: [],
-          healthScore: 0,
-        };
-        produse.forEach((produs) => {
-          console.log(produs);
-          auxNutritionalInfo.calories += produs.kcal;
-          auxNutritionalInfo.allergens = auxNutritionalInfo.allergens.concat(
-            produs.allergens.split(",").map((item) => item.trim())
-          );
-          auxNutritionalInfo.healthScore += produs.health_score;
-        });
-        if (products) {
-          auxNutritionalInfo.healthScore /= products.length;
-        }
-        setNutritionalInfo(auxNutritionalInfo);
-      } catch (error) {
-        console.error("Error fetching products:", error.message);
-      }
-    };
-
     if (basket.length > 0) {
       fetchProductsByIds();
     }
@@ -111,7 +113,7 @@ export default function Basket() {
                       height: "100%",
                     }}
                   >
-                    <Produs produs={product} />
+                    <Produs produs={product} onVote={fetchProductsByIds} />
                   </div>
                 </div>
               ))}
