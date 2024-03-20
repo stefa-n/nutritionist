@@ -70,7 +70,7 @@ export default function Login() {
         </form>
 
         <p className={styles.subtitle} style={{ marginBottom: 0 }}>
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <Link
             href="/signup"
             style={{ color: "blue", textDecoration: "none" }}
