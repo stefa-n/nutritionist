@@ -5,18 +5,19 @@ import Link from "next/link";
 import styles from "@/styles/admin/Recruit.module.css";
 
 import { useRouter } from "next/router";
+import { admin_supabase } from "../api/admin/supabase";
 
 export default function Review() {
   const [product, setProduct] = useState([]);
   const [off, setOff] = useState([]);
   const router = useRouter();
 
-  useEffect(() => {
-    const { id } = router.query;
-    if (!id) {
-      router.push("/admin");
-    }
+  const { id } = router.query;
+  if (!id) {
+    router.push("/admin");
+  }
 
+  useEffect(() => {
     const fetchProduct = async () => {
       const accessToken = localStorage.getItem("access_token");
       let response = await fetch(`/api/admin/getsubmission`, {
@@ -35,30 +36,32 @@ export default function Review() {
   }, []);
 
   useEffect(() => {
-    if (product.barcode) {
-      const fetchOpenFoodFacts = async () => {
-        let response = await fetch(
-          "https://world.openfoodfacts.org/api/v0/product/" +
-            product.barcode +
-            ".json"
-        );
-        if (response.ok) {
-          const data = await response.json();
-          setOff((prev) => ({
-            ...prev,
-            brand: data.product.brands,
-            product_name: data.product.product_name,
-            ingredients: data.product.ingredients_text_en,
-            kcal: data.product.nutriments["energy-kcal_100g"],
-            weight: parseInt(data.product.quantity_imported, 10),
-            allergens: data.product.allergens_tags.map((allergen) =>
-              allergen.replace("en:", ", ")
-            ),
-          }));
-        }
-      };
-      fetchOpenFoodFacts();
-    }
+    const fetchOpenFoodFacts = async () => {
+      let { data: productData, error } = await admin_supabase
+        .from("products")
+        .select("*")
+        .eq("id", id);
+
+      let response = await fetch(
+        "https://world.openfoodfacts.org/api/v0/product/" +
+          productData[0].barcode +
+          ".json"
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setOff({
+          brand: data.product.brands,
+          product_name: data.product.product_name,
+          ingredients: data.product.ingredients_text_en,
+          kcal: data.product.nutriments["energy-kcal_100g"],
+          weight: parseInt(data.product.quantity_imported, 10),
+          allergens: data.product.allergens_tags.map((allergen) =>
+            allergen.replace("en:", ", ")
+          ),
+        });
+      }
+    };
+    fetchOpenFoodFacts();
   }, []);
 
   const handleApprove = async () => {
