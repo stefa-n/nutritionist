@@ -464,7 +464,9 @@ export default function Produs({ produs, onVote, onNutriFetch = () => {} }) {
                 <span
                   key={allergen}
                   className={`${styles.allergen} ${
-                    allergen.includes(allergen) ? styles.inLocalStorage : ""
+                    storedAllergens.includes(allergen)
+                      ? styles.inLocalStorage
+                      : ""
                   }`}
                 >
                   {allergen}
