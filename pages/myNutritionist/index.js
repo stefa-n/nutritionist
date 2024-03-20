@@ -10,9 +10,13 @@ import { formatDistanceToNow } from "date-fns";
 
 import ReactMarkdown from "react-markdown";
 
-import { supabase } from "@/pages/index";
 import styles from "@/styles/myNutritionist.module.css";
 import CreatePostForm from "@/components/CreatePostForm";
+
+import { createClient } from "@supabase/supabase-js";
+import { checkValid } from "@/components/Auth/Auth";
+
+let supabase;
 
 const truncateDescription = (description, maxWords) => {
   const words = description.split(" ");
@@ -24,6 +28,28 @@ const truncateDescription = (description, maxWords) => {
 };
 
 export default function MyNutritionist() {
+  useEffect(() => {
+    const accessToken = localStorage.getItem("access_token");
+    if (!accessToken || !checkValid(accessToken, false)) {
+      supabase = createClient(
+        "https://devjuheafwjammjnxthd.supabase.co",
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRldmp1aGVhZndqYW1tam54dGhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDgyODE4OTIsImV4cCI6MjAyMzg1Nzg5Mn0.nb5Hx-GEORyNSyoBcVfFC3ktfS5x7vCqBtsD3kJR25M"
+      );
+      return;
+    }
+    supabase = createClient(
+      "https://devjuheafwjammjnxthd.supabase.co",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRldmp1aGVhZndqYW1tam54dGhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDgyODE4OTIsImV4cCI6MjAyMzg1Nzg5Mn0.nb5Hx-GEORyNSyoBcVfFC3ktfS5x7vCqBtsD3kJR25M",
+      {
+        global: {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+      }
+    );
+  }, []);
+
   const router = useRouter();
   const [Value, setValue] = useState("");
   const [posts, setPosts] = useState(null);
