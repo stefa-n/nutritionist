@@ -188,7 +188,9 @@ const PostDetailPage = () => {
             onClick={() => router.push(`/myNutritionist/${post.id}`)}
           >
             <div className={styles.commentDetails}>
-              <span className={styles.commentUser}>{post.username}</span>
+              <span className={styles.commentUser}>
+                {post.username.substring(0, post.username.lastIndexOf("@"))}
+              </span>
               <span className={styles.commentDate}>
                 {formatDistanceToNow(new Date(post.created_at), {
                   addSuffix: true,
@@ -222,7 +224,12 @@ const PostDetailPage = () => {
         {comments.map((comment) => (
           <div className={styles.comment} key={comment.id}>
             <div className={styles.commentDetails}>
-              <span className={styles.commentUser}>{comment.username}</span>
+              <span className={styles.commentUser}>
+                {comment.username.substring(
+                  0,
+                  comment.username.lastIndexOf("@")
+                )}
+              </span>
               <span className={styles.commentDate}>
                 {formatDistanceToNow(new Date(comment.created_at), {
                   addSuffix: true,

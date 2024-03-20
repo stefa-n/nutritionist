@@ -46,6 +46,7 @@ export default function Produs({ produs, onVote, onNutriFetch = () => {} }) {
   );
   const [newComment, setNewComment] = useState("");
   const [nutriments, setNutriments] = useState({});
+  const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
     const accessToken = localStorage.getItem("access_token");
@@ -54,29 +55,39 @@ export default function Produs({ produs, onVote, onNutriFetch = () => {} }) {
         "https://devjuheafwjammjnxthd.supabase.co",
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRldmp1aGVhZndqYW1tam54dGhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDgyODE4OTIsImV4cCI6MjAyMzg1Nzg5Mn0.nb5Hx-GEORyNSyoBcVfFC3ktfS5x7vCqBtsD3kJR25M"
       );
-      return;
-    }
-    supabase = createClient(
-      "https://devjuheafwjammjnxthd.supabase.co",
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRldmp1aGVhZndqYW1tam54dGhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDgyODE4OTIsImV4cCI6MjAyMzg1Nzg5Mn0.nb5Hx-GEORyNSyoBcVfFC3ktfS5x7vCqBtsD3kJR25M",
-      {
-        global: {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
+    } else {
+      setLoggedIn(true);
+      supabase = createClient(
+        "https://devjuheafwjammjnxthd.supabase.co",
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRldmp1aGVhZndqYW1tam54dGhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDgyODE4OTIsImV4cCI6MjAyMzg1Nzg5Mn0.nb5Hx-GEORyNSyoBcVfFC3ktfS5x7vCqBtsD3kJR25M",
+        {
+          global: {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
           },
-        },
-      }
-    );
+        }
+      );
+    }
+    fetchComments();
   }, []);
 
   const fetchComments = async () => {
+    while (!supabase) {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
     try {
       const { data, error } = await supabase
         .from("product_comments")
         .select("*")
         .eq("product_id", produs.id)
         .order("created_at", { ascending: false });
-      setComments(data);
+
+      if (error || data === null) {
+        setComments([]);
+      } else {
+        setComments(data);
+      }
     } catch (error) {
       console.error("Error fetching post:", error);
     }
@@ -154,10 +165,12 @@ export default function Produs({ produs, onVote, onNutriFetch = () => {} }) {
           downvotes,
           health_score:
             ((upvotes ? upvotes.length : 0) -
-              (downvotes ? downvotes.length : 0) +
-              nutri_dict[nutriscore] +
-              nova_dict[novascore]) /
-            3,
+            (downvotes ? downvotes.length : 0) +
+            nutriscore
+              ? nutri_dict[nutriscore]
+              : 2 + novascore
+              ? nova_dict[novascore]
+              : 2) / 3,
         })
         .eq("id", produs.id);
 
@@ -239,7 +252,6 @@ export default function Produs({ produs, onVote, onNutriFetch = () => {} }) {
       const decodedToken = jwtDecode(token);
       setUser(decodedToken);
     }
-    fetchComments();
   }, []);
 
   const ingredients = produs.ingredients.split(", ");
@@ -281,6 +293,8 @@ export default function Produs({ produs, onVote, onNutriFetch = () => {} }) {
   if (!novascore) setNovascore("N/A");
   if (!nutriscore) setNutriscore("N/A");
 
+  console.log(comments);
+
   return (
     <div>
       <div className={styles.card}>
@@ -294,24 +308,26 @@ export default function Produs({ produs, onVote, onNutriFetch = () => {} }) {
           Inapoi
         </div>
         <div className={styles.wrapper}>
-          <div className={styles.voteContainer}>
-            <button
-              onClick={() => handleVote(produs.id, 1)}
-              className={styles.voteButton}
-            >
-              <FiArrowUp size={42} />
-            </button>
-            <span className={styles.voteCount}>
-              {(produs.upvotes ? produs.upvotes.length : 0) -
-                (produs.downvotes ? produs.downvotes.length : 0)}
-            </span>
-            <button
-              onClick={() => handleVote(produs.id, -1)}
-              className={styles.voteButton}
-            >
-              <FiArrowDown size={42} />
-            </button>
-          </div>
+          {loggedIn && (
+            <div className={styles.voteContainer}>
+              <button
+                onClick={() => handleVote(produs.id, 1)}
+                className={styles.voteButton}
+              >
+                <FiArrowUp size={42} />
+              </button>
+              <span className={styles.voteCount}>
+                {(produs.upvotes ? produs.upvotes.length : 0) -
+                  (produs.downvotes ? produs.downvotes.length : 0)}
+              </span>
+              <button
+                onClick={() => handleVote(produs.id, -1)}
+                className={styles.voteButton}
+              >
+                <FiArrowDown size={42} />
+              </button>
+            </div>
+          )}
           <div style={{ width: "200px" }}>
             <Image
               src={produs.image}
