@@ -1,7 +1,7 @@
 import Router from "next/router";
 import { supabase } from "@/pages/index";
 
-export async function checkValid(token) {
+export async function checkValid(token, redirect = true) {
   const response = await fetch("/api/auth/checkvalid", {
     method: "POST",
     headers: {
@@ -10,13 +10,13 @@ export async function checkValid(token) {
     body: JSON.stringify({ token: token }),
   });
   if (!response.ok) {
-    signOut();
+    signOut(redirect);
   }
 }
 
-export async function signOut() {
+export async function signOut(redirect) {
   console.log("sign out");
   const { error } = await supabase.auth.signOut();
   localStorage.removeItem("access_token");
-  Router.push("login");
+  if (redirect) Router.push("login");
 }
