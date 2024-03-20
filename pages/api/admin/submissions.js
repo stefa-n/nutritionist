@@ -7,9 +7,9 @@ export default async function handler(req, res) {
     if (!accessToken) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    const email = jwtDecode(accessToken).email;
+    const uid = jwtDecode(accessToken).sub;
 
-    if (email != "filimonstefanmihai@gmail.com") {
+    if (uid != "92b35ba5-b90d-44b3-b6af-c7afa521e304") {
       return res.status(403).json({ message: "Forbidden" });
     }
 

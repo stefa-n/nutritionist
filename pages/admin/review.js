@@ -34,7 +34,6 @@ export default function Review() {
     fetchProduct();
   }, []);
 
-  // get info from openfoodfacts
   useEffect(() => {
     if (product.barcode) {
       const fetchOpenFoodFacts = async () => {
