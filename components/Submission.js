@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styles from "./styles/Submission.module.css";
-import { supabase } from "@/pages/index.js";
 import { jwtDecode } from "jwt-decode";
 import { checkValid } from "@/components/Auth/Auth";
 
@@ -88,6 +87,12 @@ const Submission = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    const [supabase, setSupabase] = useState();
+    setSupabase(createClient(
+      "https://devjuheafwjammjnxthd.supabase.co",
+      uid
+    ));
 
     let approved = false;
 

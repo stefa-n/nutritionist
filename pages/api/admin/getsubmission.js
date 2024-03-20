@@ -1,4 +1,4 @@
-import { supabase } from "@/pages/index.js";
+import { admin_supabase } from "./supabase";
 import { jwtDecode } from "jwt-decode";
 
 export default async function handler(req, res) {
@@ -17,14 +17,14 @@ export default async function handler(req, res) {
       return res.status(400).json({ message: "Bad Request" });
     }
 
-    let { data, error } = await supabase
+    let { data, error } = await admin_supabase
       .from("products")
       .select("*")
       .eq("id", id);
 
     let produse = data;
 
-    let { data: imageData, error: imageError } = supabase.storage
+    let { data: imageData, error: imageError } = admin_supabase.storage
       .from("products")
       .getPublicUrl(`${produse[0].id}.${produse[0].image_format}`);
 

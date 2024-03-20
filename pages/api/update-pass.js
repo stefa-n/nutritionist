@@ -1,4 +1,4 @@
-import { supabase } from "@/pages/index";
+import { admin_supabase } from "./supabase";
 import { jwtDecode } from "jwt-decode";
 
 export default async function handler(req, res) {
@@ -7,7 +7,7 @@ export default async function handler(req, res) {
   try {
     const uid = jwtDecode(accessToken).sub;
 
-    const { data: user, error } = await supabase.auth.admin.updateUserById(
+    const { data: user, error } = await admin_supabase.auth.admin.updateUserById(
       uid,
       { password }
     );

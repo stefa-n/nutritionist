@@ -3,12 +3,11 @@ import { useEffect, useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { jwtDecode } from "jwt-decode";
 import { FiArrowUp, FiArrowDown } from "react-icons/fi";
+import { createClient } from "@supabase/supabase-js";
 
 import styles from "@/components/styles/Produs.module.css";
 
 import Tooltip from "./produs/Tooltip";
-
-import { supabase } from "@/pages/index";
 
 const nutri_dict = {
   A: 4,
@@ -27,6 +26,8 @@ const nova_dict = {
   undefined: 1,
 };
 
+let supabase;
+
 export default function Produs({ produs, onVote }) {
   const [nutriscore, setNutriscore] = useState("");
   const [novascore, setNovascore] = useState("");
@@ -37,6 +38,28 @@ export default function Produs({ produs, onVote }) {
     []
   );
   const [newComment, setNewComment] = useState("");
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem("access_token");
+    if (!accessToken) {
+      supabase = createClient(
+        "https://devjuheafwjammjnxthd.supabase.co",
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRldmp1aGVhZndqYW1tam54dGhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDgyODE4OTIsImV4cCI6MjAyMzg1Nzg5Mn0.nb5Hx-GEORyNSyoBcVfFC3ktfS5x7vCqBtsD3kJR25M"
+      );
+      return;
+    }
+    supabase = createClient(
+      "https://devjuheafwjammjnxthd.supabase.co",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRldmp1aGVhZndqYW1tam54dGhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDgyODE4OTIsImV4cCI6MjAyMzg1Nzg5Mn0.nb5Hx-GEORyNSyoBcVfFC3ktfS5x7vCqBtsD3kJR25M",
+      {
+        global: {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+      }
+    );
+  }, []);
 
   const fetchComments = async () => {
     try {

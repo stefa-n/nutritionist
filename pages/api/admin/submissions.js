@@ -1,4 +1,4 @@
-import { supabase } from "@/pages/index.js";
+import { admin_supabase } from "./supabase";
 import { jwtDecode } from "jwt-decode";
 
 export default async function handler(req, res) {
@@ -13,7 +13,7 @@ export default async function handler(req, res) {
       return res.status(403).json({ message: "Forbidden" });
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await admin_supabase
       .from("products")
       .select("*")
       .eq("approved", false);
@@ -21,7 +21,7 @@ export default async function handler(req, res) {
     let produse = data;
 
     for (let i = 0; i < data.length; i++) {
-      const { data } = supabase.storage
+      const { data } = admin_supabase.storage
         .from("products")
         .getPublicUrl(`${produse[i].id}.${produse[i].image_format}`);
 

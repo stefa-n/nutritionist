@@ -1,5 +1,5 @@
+import { createClient } from "@supabase/supabase-js";
 import { useRouter } from "next/router";
-import { supabase } from "@/pages/index";
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { formatDistanceToNow } from "date-fns";
@@ -8,13 +8,44 @@ import { jwtDecode } from "jwt-decode";
 
 import styles from "@/styles/myNutritionist.module.css";
 
+let supabase;
+
 const PostDetailPage = () => {
   const router = useRouter();
   const { postID } = router.query;
+  let token;
   const [user, setUser] = useState({});
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState(null);
   const [newComment, setNewComment] = useState("");
+
+  useEffect(() => {
+    token = localStorage.getItem("access_token")
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+
+    supabase = createClient(
+      "https://devjuheafwjammjnxthd.supabase.co",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRldmp1aGVhZndqYW1tam54dGhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDgyODE4OTIsImV4cCI6MjAyMzg1Nzg5Mn0.nb5Hx-GEORyNSyoBcVfFC3ktfS5x7vCqBtsD3kJR25M",
+      {
+        'global': {
+          'headers': {
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      }
+    );
+
+    const decodedToken = jwtDecode(token);
+    setUser(decodedToken);
+
+    if (postID) {
+      fetchPost();
+      fetchComments();
+    }
+  }, [postID]);
 
   const fetchPost = async () => {
     try {
@@ -123,19 +154,6 @@ const PostDetailPage = () => {
     }
     fetchPost();
   };
-  useEffect(() => {
-    const token = localStorage.getItem("access_token");
-    if (!token) {
-      router.push("/login");
-      return;
-    }
-    const decodedToken = jwtDecode(token);
-    setUser(decodedToken);
-    if (postID) {
-      fetchPost();
-      fetchComments();
-    }
-  }, [postID]);
 
   if (!post || !comments) {
     return <div>Loading...</div>;

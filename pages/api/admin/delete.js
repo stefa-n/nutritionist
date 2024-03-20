@@ -1,4 +1,4 @@
-import { supabase } from "@/pages/index.js";
+import { admin_supabase } from "./supabase";
 import { jwtDecode } from "jwt-decode";
 
 export default async function handler(req, res) {
@@ -13,7 +13,7 @@ export default async function handler(req, res) {
       return res.status(403).json({ message: "Forbidden" });
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await admin_supabase
       .from("products")
       .delete()
       .eq("id", id);

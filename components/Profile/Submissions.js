@@ -3,9 +3,11 @@ import Router from "next/router";
 import Card from "../Card";
 import styles from "../styles/Submissions.module.css";
 import EditSubmission from "./EditSubmission";
-import { supabase } from "@/pages";
+
+import { createClient } from "@supabase/supabase-js";
 
 const Submissions = () => {
+  const [supabase, setSupabase] = useState();
   const [submissions, setSubmissions] = useState([]);
 
   useEffect(() => {
@@ -14,6 +16,17 @@ const Submissions = () => {
       if (!accessToken) {
         return;
       }
+      setSupabase(createClient(
+        "https://devjuheafwjammjnxthd.supabase.co",
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRldmp1aGVhZndqYW1tam54dGhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDgyODE4OTIsImV4cCI6MjAyMzg1Nzg5Mn0.nb5Hx-GEORyNSyoBcVfFC3ktfS5x7vCqBtsD3kJR25M",
+        {
+          'global': {
+            'headers': {
+              'Authorization': `Bearer ${accessToken}`
+            }
+          }
+        }
+      ));
       const response = await fetch(`/api/submissions`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
