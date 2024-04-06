@@ -21,14 +21,14 @@ export default function Challenge({
       }}
     >
       <div className={styles.checkbox}>
-        <input id={`chk.${type}`} type="checkbox" disabled={submitted} />
+        <input id={`com.${type}`} type="checkbox" disabled={submitted} />
       </div>
       <div className={styles.challenge}>
         <p className={styles.title}>{title}</p>
         <p className={styles.description}>{description}</p>
       </div>
       <p className={styles.reward}>
-        x<span id={`val.${type}`}>{reward}</span>
+        x<span id={`cval.${type}`}>{reward}</span>
         <Image
           src={require(`@/public/images/icons/${type}.png`)}
           width={30}

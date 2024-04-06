@@ -11,6 +11,7 @@ import AddAlergens from "@/components/Profile/AddAlergens";
 import Submissions from "@/components/Profile/Submissions";
 import Topbar from "@/components/Topbar";
 import { checkValid } from "@/components/Auth/Auth";
+import CommunityChallenge from "@/components/Profile/CommunityChallenges";
 
 export default function Profile() {
   const router = useRouter();
@@ -45,6 +46,7 @@ export default function Profile() {
           </div>
         </div>
         <DailyChallenges />
+        <CommunityChallenge />
         <ProfileData />
         <AddDietaryPreferences />
         <AddAlergens />

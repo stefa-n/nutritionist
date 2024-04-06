@@ -20,28 +20,29 @@ async function fetchChallenges() {
   return challenges;
 }
 
-let challenges = fetchChallenges();
-challenges.then((data) => {
-  challenges = data;
-  console.log(`Stored ${challenges.length} challenges in cache`);
-});
-
-app.get("/dailyc", async function (req, res) {
-  const { user_id } = req.query;
-  const { data, error } = await supabase
-    .from("user_data")
+async function fetchCommunityChallenge() {
+  // select a random challenge from the challenges table where community = true
+  const { data: challenge, error } = await supabase
+    .from("challenges")
     .select("*")
-    .eq("user_id", user_id);
+    .eq("community", true)
+    .order("random")
+    .limit(1);
 
   if (error) {
     console.error(error);
-    res.status(500).json({ error: error.message });
     return;
   }
 
-  const userData = data[0];
+  return challenge;
+}
 
-  res.json({ userData });
+let challenges = fetchChallenges();
+let communitychallenge = fetchChallenges();
+
+challenges.then((data) => {
+  challenges = data;
+  console.log(`Stored ${challenges.length} challenges in cache`);
 });
 
 setInterval(async () => {
@@ -110,6 +111,10 @@ setInterval(async () => {
     );
   });
 }, 1000 * 60 * 60 * 24);
+
+app.get("/communitychallenge", async (req, res) => {
+  res.json(challenge);
+});
 
 app.listen(3001, function () {
   console.log(`Backend listening on port 3001`);
