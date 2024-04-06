@@ -15,6 +15,7 @@
     "@mui/material": "^5.15.13",
     "@supabase/supabase-js": "^2.39.6",
     "chart.js": "^4.4.2",
+    "chartjs": "^0.3.24",
     "date-fns": "^3.5.0",
     "faker": "^5.5.3",
     "jwt-decode": "^4.0.0",

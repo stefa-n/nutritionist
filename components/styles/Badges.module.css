@@ -1,0 +1,26 @@
+.badge {
+    position: relative
+}
+
+.badge > span {
+    user-select: none;
+    display: block;
+    position: absolute;
+    left: -100%;
+    opacity: 0;
+}
+
+.badge:hover > span {
+    transition: opacity 0.3s;
+    opacity: 1;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    background-color: #333;
+    color: white;
+    width: 8rem;
+    padding: 0.3rem;
+    text-align: center;
+    border-radius: 5px;
+}

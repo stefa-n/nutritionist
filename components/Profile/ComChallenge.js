@@ -1,12 +1,13 @@
 import Image from "next/image";
 import styles from "../styles/Challenge.module.css";
 
-export default function Challenge({
+export default function ComChallenge({
   type,
   title,
   description,
   reward,
   submitted,
+  progress,
 }) {
   return (
     <div
@@ -26,6 +27,7 @@ export default function Challenge({
       <div className={styles.challenge}>
         <p className={styles.title}>{title}</p>
         <p className={styles.description}>{description}</p>
+        <p className={styles.description}>{progress} progress</p>
       </div>
       <p className={styles.reward}>
         x<span id={`cval.${type}`}>{reward}</span>
