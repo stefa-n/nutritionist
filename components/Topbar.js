@@ -60,12 +60,6 @@ export default function Topbar({ value, profile, onSearch, search = true }) {
         {isLoggedIn ? (
           <>
             <button
-              onClick={() => router.push("/challenges")}
-              className={styles.forumBtn}
-            >
-              Challenges
-            </button>
-            <button
               onClick={() => router.push("/leaderboard")}
               className={styles.forumBtn}
             >

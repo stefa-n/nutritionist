@@ -9,6 +9,7 @@ import ProfileData from "@/components/Profile/ProfileData";
 import AddDietaryPreferences from "@/components/Profile/AddDietaryPreferences";
 import AddAlergens from "@/components/Profile/AddAlergens";
 import Submissions from "@/components/Profile/Submissions";
+import Stats from "@/components/Profile/Stats";
 import Topbar from "@/components/Topbar";
 import { checkValid } from "@/components/Auth/Auth";
 
@@ -45,6 +46,7 @@ export default function Profile() {
           </div>
         </div>
         <DailyChallenges />
+        <Stats />
         <ProfileData />
         <AddDietaryPreferences />
         <AddAlergens />

@@ -1,4 +1,3 @@
-import Topbar from "@/components/Topbar";
 import { supabase } from "@/pages/index.js";
 import { jwtDecode } from "jwt-decode";
 import {
@@ -14,6 +13,7 @@ import {
 import { Line } from "react-chartjs-2";
 
 import { useEffect, useState } from "react";
+import { withTheme } from "@emotion/react";
 
 ChartJS.register(
   CategoryScale,
@@ -26,20 +26,29 @@ ChartJS.register(
 );
 export const options = {
   responsive: true,
+  layout: {
+    padding: {
+      left: -10,
+    },
+  },
   plugins: {
     legend: {
       position: "top",
     },
     title: {
       display: true,
-      text: "User challenges",
+      text: "Challenges tracking",
+      font: {
+        size: 24,
+      },
+      color: "#fff",
     },
   },
 };
 
 const labels = ["January", "February", "March", "April", "May", "June", "July"];
 
-export default function Challenges() {
+export default function Stats() {
   const [progress, setProgress] = useState([]);
   const [chartData, setChartData] = useState({
     labels,
@@ -112,9 +121,19 @@ export default function Challenges() {
   }, []);
   return (
     <>
-      <Topbar search={false} />
-      <div>Welcome to challenges</div>
-      {<Line options={options} data={chartData} />}
+      <div
+        style={{
+          margin: "20px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "column",
+          height: "400px",
+          width: "1000px",
+        }}
+      >
+        {<Line options={options} data={chartData} />}
+      </div>
     </>
   );
 }
