@@ -175,6 +175,7 @@ app.get("/communitychallenge", async (req, res) => {
     .eq("id", communitychallenge.id);
 
   res.json(challenges[0]);
+  console.log("Request");
 });
 
 app.use(function (req, res, next) {

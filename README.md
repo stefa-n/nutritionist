@@ -6,6 +6,9 @@ Welcome to the github repo for our app "Nutritionist"
 
 - [https://www.youtube.com/watch?v=JINcZ-13XkQ](https://www.youtube.com/watch?v=JINcZ-13XkQ)
 
+## Final presentation video
+- [https://www.youtube.com/watch?v=d2s_GzU8TrM](https://www.youtube.com/watch?v=d2s_GzU8TrM)
+
 ## Members
 
 - Filimon Stefan Mihai [stefa-n](https://github.com/stefa-n/)

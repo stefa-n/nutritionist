@@ -15,11 +15,16 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import styles from "@/styles/Home.module.css";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import { jwtDecode } from "jwt-decode";
 
 export default function Leaderboard() {
   const [progress, setProgress] = useState([]);
   const [usernames, setUsernames] = useState({});
   const [ranking, setRanking] = useState([]);
+  const [open, setOpen] = useState(false);
   const [rewards, setRewards] = useState([
     {
       id: 0,
@@ -126,6 +131,45 @@ export default function Leaderboard() {
   useEffect(() => {
     fetchUsernames();
   }, [ranking]);
+
+  async function redeemReward(id) {
+    let supabase = admin_supabase;
+
+    let price = rewards[id];
+
+    let jwt = localStorage.getItem("access_token");
+    let userid = jwtDecode(jwt).sub;
+
+    let { data: userData } = await supabase
+      .from("user_data")
+      .select("*")
+      .eq("user_id", userid);
+    if (!userData[0]) return;
+
+    if (userData[0].total_points >= price) {
+      let { data, error } = await supabase
+        .from("rewards")
+        .select("*")
+        .eq("reward_id", id)
+        .limit(1);
+
+      if (!data) {
+        return;
+      }
+
+      await supabase
+        .from("rewards")
+        .update("total_points", userData[0].total_points - price)
+        .eq("user_id", userid);
+
+      setOpen(true);
+    }
+  }
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <>
       <Topbar search={false} />
@@ -133,21 +177,42 @@ export default function Leaderboard() {
       <div className={`${styles.grid}`}>
         {rewards.map((reward) => {
           return (
-            <Card key={reward.id} sx={{ maxWidth: 345 }}>
-              <CardMedia
-                sx={{ height: 140 }}
-                image={reward.src}
-                title="green iguana"
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  {reward.name}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="large">{reward.price} points</Button>
-              </CardActions>
-            </Card>
+            <div>
+              <Dialog
+                open={open}
+                onClose={handleClose}
+                fullWidth={true}
+                maxWidth="lg"
+              >
+                <DialogTitle>Your Reward:</DialogTitle>
+                <DialogContent>
+                  HDUASHUDHUSA-DSBAUDHUAHUSDA-UWQY723YBAJSD-ASJBCLLAISCD
+                </DialogContent>
+              </Dialog>
+              ;
+              <Card key={reward.id} sx={{ maxWidth: 345 }}>
+                <CardMedia
+                  sx={{ height: 140 }}
+                  image={reward.src}
+                  title="green iguana"
+                />
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    {reward.name}
+                  </Typography>
+                </CardContent>
+                <CardActions>
+                  <Button
+                    size="large"
+                    onClick={() => {
+                      redeemReward(reward.id);
+                    }}
+                  >
+                    {reward.price} points
+                  </Button>
+                </CardActions>
+              </Card>
+            </div>
           );
         })}
       </div>
