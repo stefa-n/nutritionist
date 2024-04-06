@@ -159,14 +159,14 @@ export default function Stats() {
       );
     };
     const requiredConsecutiveCount = 1;
-    let counter = 1;
+    let counter = 0;
     for (let i = 1; i < arr.length; ++i) {
-      if (compare(arr[i], arr[i - 1])) {
+      if (compare(arr[i - 1], arr[i])) {
         counter++;
       }
-      // if (arr[i - 1] == streakEnd) {
-      //   break;
-      // }
+      if (arr[i - 1] == streakEnd) {
+        break;
+      }
     }
     return counter;
   };
@@ -180,6 +180,7 @@ export default function Stats() {
         streak_end: true,
       })
       .eq("id", progress[progress.length - 1].id);
+    checkStreak();
   };
   useEffect(() => {
     fetchProgress();
@@ -204,9 +205,9 @@ export default function Stats() {
         Total points: {sum}
         <h3>Set goal (1 day streak = 100 points)</h3>
         <h4>Current streak: {checkStreak()}</h4>
-        {/* <button onClick={claimBonus} className={styles.loginBtn}>
+        <button onClick={claimBonus} className={styles.forumBtn}>
           Claim bonus
-        </button> */}
+        </button>
         <Grid container spacing={2} alignItems="center">
           <Grid item xs>
             <Slider
