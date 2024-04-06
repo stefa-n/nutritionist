@@ -161,20 +161,37 @@ export default function DailyChallenges() {
       console.error(error);
       return;
     }
+    if (data.length === 0) {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const { data: gaming } = await supabase
+        .from("user_data")
+        .select("*")
+        .eq("user_id", user.sub);
 
-    let challenges = data[0].challenges;
+      let challenges = gaming[0].challenges;
 
-    console.log(challenges);
+      const { data: allChallenges } = await supabase
+        .from("challenges")
+        .select("*");
 
-    const { data: allChallenges } = await supabase
-      .from("challenges")
-      .select("*");
+      challenges = allChallenges.filter((challenge) =>
+        challenges.includes(challenge.id)
+      );
 
-    challenges = allChallenges.filter((challenge) =>
-      challenges.includes(challenge.id)
-    );
+      setChallenges(challenges);
+    } else {
+      let challenges = data[0].challenges;
 
-    setChallenges(challenges);
+      const { data: allChallenges } = await supabase
+        .from("challenges")
+        .select("*");
+
+      challenges = allChallenges.filter((challenge) =>
+        challenges.includes(challenge.id)
+      );
+
+      setChallenges(challenges);
+    }
   };
 
   useEffect(() => {
@@ -207,6 +224,7 @@ export default function DailyChallenges() {
       </div>
       {challenges.map((challenge) => (
         <Challenge
+          key={challenge.id}
           type={challenge.type}
           title={challenge.title}
           description={challenge.description}

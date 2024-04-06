@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import md5 from "md5";
 
 import styles from "@/styles/Profile.module.css";
+import Badges from "../components/Profile/Badges";
 import DailyChallenges from "@/components/Profile/DailyChallanges";
 import ProfileData from "@/components/Profile/ProfileData";
 import AddDietaryPreferences from "@/components/Profile/AddDietaryPreferences";
@@ -46,6 +47,7 @@ export default function Profile() {
             <div>{user.email}</div>
           </div>
         </div>
+        <Badges />
         <DailyChallenges />
         <CommunityChallenge />
         <Stats />

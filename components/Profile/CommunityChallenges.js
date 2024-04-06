@@ -30,7 +30,7 @@ export default function CommunityChallenge() {
       }
     );
 
-    fetch("http://localhost:3001/communitychallenge", {
+    fetch("https://nutritionist-production.up.railway.app/communitychallenge", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${accessToken}`,
