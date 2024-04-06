@@ -10,7 +10,8 @@ const supabase = createClient(
 async function fetchChallenges() {
   const { data: challenges, error } = await supabase
     .from("challenges")
-    .select("*");
+    .select("*")
+    .eq("is_community", false);
 
   if (error) {
     console.error(error);
@@ -21,32 +22,33 @@ async function fetchChallenges() {
 }
 
 async function fetchCommunityChallenge() {
-  // select a random challenge from the challenges table where community = true
-  const { data: challenge, error } = await supabase
+  const { data: challenges, error } = await supabase
     .from("challenges")
     .select("*")
-    .eq("community", true)
-    .order("random")
-    .limit(1);
+    .eq("is_community", true);
 
   if (error) {
     console.error(error);
     return;
   }
 
-  return challenge;
+  return challenges[Math.floor(Math.random() * challenges.length)];
 }
 
-let challenges = fetchChallenges();
-let communitychallenge = fetchChallenges();
+var challenges = fetchChallenges();
+var communitychallenge = fetchCommunityChallenge();
 
 challenges.then((data) => {
   challenges = data;
   console.log(`Stored ${challenges.length} challenges in cache`);
 });
 
+communitychallenge.then((data) => {
+  communitychallenge = data;
+  console.log(`Stored community challenge in cache`, communitychallenge);
+});
+
 setInterval(async () => {
-  challenges = await fetchChallenges();
   console.log(`Stored ${challenges.length} challenges in cache`);
 
   const { data: users, error } = await supabase.from("user_data").select("*");
@@ -112,8 +114,67 @@ setInterval(async () => {
   });
 }, 1000 * 60 * 60 * 24);
 
+setInterval(async () => {
+  const { data: challenges, error } = await supabase
+    .from("challenges")
+    .select("*")
+    .eq("id", communitychallenge.id);
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  if (
+    challenges[0].community_participants.length >=
+    challenges[0].community_progress
+  ) {
+    challenges[0].community_participants.forEach(async (entry) => {
+      // get the user's points of the challenge type and total points, then update them
+
+      const { data: userData, error } = await supabase
+        .from("user_data")
+        .select("*")
+        .eq("user_id", entry);
+
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      let user = userData[0];
+      let points = user[`${challenges[0].type}_points`];
+      points += challenges[0].reward;
+      let totalPoints = user.total_points;
+      totalPoints += challenges[0].reward;
+
+      await supabase
+        .from("user_data")
+        .update({
+          [`${challenges[0].type}_points`]: points,
+          total_points: totalPoints,
+        })
+        .eq("user_id", entry);
+
+      await supabase.from("transactions").insert([
+        {
+          user_id: entry,
+          [`${challenges[0].type}_points`]: challenges[0].reward,
+        },
+      ]);
+    });
+  }
+
+  communitychallenge = fetchCommunityChallenge();
+}, 1000 * 60 * 60 * 24);
+
 app.get("/communitychallenge", async (req, res) => {
-  res.json(challenge);
+  const { data: challenges, error } = await supabase
+    .from("challenges")
+    .select("*")
+    .eq("id", communitychallenge.id);
+
+  res.json(challenges[0]);
 });
 
 app.listen(3001, function () {

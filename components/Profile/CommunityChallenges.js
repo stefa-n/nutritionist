@@ -1,19 +1,20 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { jwtDecode } from "jwt-decode";
-import { formatDistanceToNow, set } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 import Router from "next/router";
-import Challenge from "./Challenge";
+import Challenge from "./ComChallenge";
 
 export default function CommunityChallenge() {
   const [challenge, setChallenge] = useState();
-  const [submitted, setSubmitted] = useState(true);
+  const [submitted, setSubmitted] = useState(false);
   const tommorow = new Date().setHours(23, 59, 59, 999);
 
   let supabase;
 
   useEffect(() => {
     const accessToken = localStorage.getItem("access_token");
+    const user = jwtDecode(accessToken);
     if (!accessToken) {
       Router.push("/login");
     }
@@ -37,7 +38,11 @@ export default function CommunityChallenge() {
     })
       .then((res) => res.json())
       .then((data) => {
-        setChallenge(data[0]);
+        setChallenge(data);
+        console.log(data.community_participants.length);
+        data.community_participants.forEach((entry) => {
+          if (entry == user.sub) setSubmitted(true);
+        });
       });
   }, []);
 
@@ -54,6 +59,16 @@ export default function CommunityChallenge() {
         },
       }
     );
+
+    const accessToken = localStorage.getItem("access_token");
+    const user = jwtDecode(accessToken);
+
+    const { data, error } = await supabase
+      .from("challenges")
+      .update({
+        community_participants: [...challenge.community_participants, user.sub],
+      })
+      .eq("id", challenge.id);
   };
 
   return (
@@ -68,7 +83,7 @@ export default function CommunityChallenge() {
       }}
     >
       <div style={{ display: "flex" }}>
-        <p style={{ width: "100%" }}>Daily Challenges</p>
+        <p style={{ width: "100%" }}>Community Challenges</p>
 
         <p style={{ width: "100%", textAlign: "right" }}>
           resets{" "}
@@ -84,6 +99,7 @@ export default function CommunityChallenge() {
           description={challenge.description}
           reward={challenge.points}
           submitted={submitted}
+          progress={`${challenge.community_participants.length}/${challenge.community_progress}`}
         />
       )}
 
