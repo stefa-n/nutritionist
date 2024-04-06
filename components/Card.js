@@ -69,6 +69,7 @@ export default function Card({
       basket.push(id);
       localStorage.setItem("basket", JSON.stringify(basket));
     }
+    onRemove();
   };
 
   const removeFromBasket = () => {

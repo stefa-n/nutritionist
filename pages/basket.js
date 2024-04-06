@@ -26,6 +26,26 @@ export default function Basket() {
     sodium: 0,
     sugars: 0,
   });
+  const [recommandations, setRecommandations] = useState([]);
+  const fetchProduse = async () => {
+    const { data, error } = await supabase
+      .from("products")
+      .select("*")
+      .eq("approved", true)
+      .order("health_score", { ascending: false })
+      .limit("3");
+    const produse = data;
+
+    for (let i = 0; i < data.length; i++) {
+      const { data } = supabase.storage
+        .from("products")
+        .getPublicUrl(`${produse[i].id}.${produse[i].image_format}`);
+
+      produse[i].image = `${data.publicUrl}`;
+    }
+
+    setRecommandations(produse);
+  };
   const handleNutri = (props) => {
     if (!(props.id in nutriments)) {
       const auxSum = {};
@@ -102,6 +122,7 @@ export default function Basket() {
   useEffect(() => {
     if (basket.length > 0) {
       fetchProductsByIds();
+      fetchProduse();
     }
   }, [basket]);
   return (
@@ -217,6 +238,43 @@ export default function Basket() {
               </ul>
               <h2>Health Score</h2>
               <p>Score: {nutritionalInfo.healthScore}</p>
+              <h2>Recommandations</h2>
+              <div className={`${styles.grid}`}>
+                {recommandations.map((product) => (
+                  <div key={product.id}>
+                    <Card
+                      barcode={product.barcode}
+                      key={product.id}
+                      brand={product.brand}
+                      name={product.product_name}
+                      image={product.image}
+                      calories={product.kcal}
+                      healthScore={product.health_score}
+                      onRemove={fetchBasketFromLocalStorage}
+                      id={product.id}
+                      onClick={() => {
+                        document.getElementsByClassName(
+                          "product." + product.id
+                        )[0].style.display = "flex";
+                      }}
+                    />
+                    <div
+                      className={"product." + product.id}
+                      style={{
+                        display: "none",
+                        position: "absolute",
+                        zIndex: "100",
+                        top: "0",
+                        left: "0",
+                        width: "100%",
+                        height: "100%",
+                      }}
+                    >
+                      <Produs produs={product} onVote={fetchProduse} />
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>
