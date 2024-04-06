@@ -63,7 +63,7 @@ export default function Topbar({ value, profile, onSearch, search = true }) {
               onClick={() => router.push("/leaderboard")}
               className={styles.forumBtn}
             >
-              Leaderboard
+              Leaderboard & Rewards
             </button>
             <button
               onClick={() => router.push("/profile")}
