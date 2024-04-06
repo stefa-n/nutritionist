@@ -202,6 +202,7 @@ app.all("*", function (req, res, next) {
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
   );
+  console.log("Request received from", origin);
   next();
 });
 
