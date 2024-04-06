@@ -211,6 +211,7 @@ export default function DailyChallenges() {
           title={challenge.title}
           description={challenge.description}
           reward={challenge.points}
+          submitted={submitted}
         />
       ))}
       <div
