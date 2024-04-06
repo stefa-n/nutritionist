@@ -125,14 +125,31 @@ export default function DailyChallenges() {
     }
 
     if (data.length === 0) {
-      await supabase.from("user_data").insert([{ user_id: user.sub }]);
+      await supabase
+        .from("user_data")
+        .insert([{ user_id: user.sub, challenges: [6, 1, 5, 2] }]);
+      setSubmitted(false);
+    } else {
+      setSubmitted(data[0].submitted);
     }
-
-    setSubmitted(data[0].submitted);
   };
 
   const getUserChallenges = async () => {
     const accessToken = localStorage.getItem("access_token");
+    if (!localStorage.getItem("access_token")) {
+      Router.push("/login");
+    }
+    supabase = createClient(
+      "https://devjuheafwjammjnxthd.supabase.co",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRldmp1aGVhZndqYW1tam54dGhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDgyODE4OTIsImV4cCI6MjAyMzg1Nzg5Mn0.nb5Hx-GEORyNSyoBcVfFC3ktfS5x7vCqBtsD3kJR25M",
+      {
+        global: {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        },
+      }
+    );
     const user = jwtDecode(accessToken);
 
     const { data, error } = await supabase
@@ -162,8 +179,11 @@ export default function DailyChallenges() {
 
   useEffect(() => {
     checkTable();
-    getUserChallenges();
   }, []);
+
+  useEffect(() => {
+    getUserChallenges();
+  }, [submitted]);
   return (
     <div
       style={{
