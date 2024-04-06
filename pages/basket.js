@@ -88,7 +88,6 @@ export default function Basket() {
       }
 
       setProducts(produse);
-      console.log(produse);
       let auxNutritionalInfo = {
         calories: 0,
         protein: 0,
