@@ -50,7 +50,14 @@ export default function Badges() {
         maxWidth: "1000px",
       }}
     >
-      <p style={{ float: "left", width: "100%" }}>My Badges</p>
+      {total_points > 100 && (
+        <p style={{ float: "left", width: "100%" }}>My Badges</p>
+      )}
+      {total_points < 100 && (
+        <p style={{ float: "left", width: "100%", opacity: "0.5" }}>
+          No Badges
+        </p>
+      )}
       <div
         style={{
           display: "flex",

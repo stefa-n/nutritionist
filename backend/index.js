@@ -177,6 +177,8 @@ app.get("/communitychallenge", async (req, res) => {
   res.json(challenges[0]);
 });
 
+app.use(cors());
+
 app.listen(3001, function () {
   console.log(`Backend listening on port 3001`);
 });
