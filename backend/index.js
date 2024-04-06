@@ -1,6 +1,5 @@
 const express = require("express");
 const { createClient } = require("@supabase/supabase-js");
-const cors = require("cors");
 
 const app = express();
 const supabase = createClient(
@@ -178,12 +177,20 @@ app.get("/communitychallenge", async (req, res) => {
   res.json(challenges[0]);
 });
 
-var corsOptions = {
-  origin: "*",
-  optionsSuccessStatus: 200,
-};
+app.use(function (req, res, next) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-Requested-With,content-type, authorization"
+  );
+  res.setHeader("Access-Control-Allow-Credentials", true);
 
-app.use(cors({ credentials: true, origin: true }));
+  next();
+});
 
 app.listen(3001, function () {
   console.log(`Backend listening on port 3001`);
