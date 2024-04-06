@@ -178,7 +178,12 @@ app.get("/communitychallenge", async (req, res) => {
   res.json(challenges[0]);
 });
 
-app.use(cors());
+var corsOptions = {
+  origin: "*",
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors({ credentials: true, origin: true }));
 
 app.listen(3001, function () {
   console.log(`Backend listening on port 3001`);
