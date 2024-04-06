@@ -1,0 +1,30 @@
+.challenge {
+    width: 45%;
+}
+
+.checkbox {
+    padding-right: 2rem;
+}
+
+.checkbox input {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.title {
+    margin-bottom: 0rem;
+}
+
+.description {
+    margin-top: 0rem;
+    font-size: 0.77rem;
+}
+
+.reward {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.7rem;
+    padding-left: 1rem;
+    margin: 0;
+}
